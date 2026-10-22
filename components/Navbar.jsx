@@ -6,13 +6,22 @@ import { AnimatePresence, motion } from "framer-motion";
 import Logo from "./Logo";
 import Icon from "./Icon";
 import { SITE } from "@/lib/site";
+import { useShortlist } from "@/lib/store";
 
 const LINKS = [
   { href: "/properties?mode=buy", label: "Buy" },
   { href: "/properties?mode=rent", label: "Rent" },
-  { href: "/properties?mode=pg", label: "PG" },
+  { href: "/projects", label: "Projects" },
+  { href: "/localities", label: "Localities" },
+  { href: "/tools", label: "Tools" },
+];
+
+// The mobile drawer has room for everything
+const DRAWER = [
+  ...LINKS,
+  { href: "/properties?mode=pg", label: "PG / Hostels" },
   { href: "/properties?cat=commercial", label: "Commercial" },
-  { href: "/#how-it-works", label: "How it works" },
+  { href: "/compare", label: "Compare" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -20,6 +29,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const shortlist = useShortlist();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -45,8 +55,9 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="nav-actions">
-          <Link href="/favourites" className="nav-icon" aria-label="Saved properties">
+          <Link href="/favourites" className="nav-icon" aria-label="Shortlist">
             <Icon name="heart" />
+            {shortlist.ids.length > 0 && <span className="nav-count">{shortlist.ids.length}</span>}
           </Link>
           <Link href="/post-property" className="post-pill">
             Post Property <span className="free">FREE</span>
@@ -66,7 +77,7 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            {LINKS.map((l, i) => (
+            {DRAWER.map((l, i) => (
               <motion.div key={l.href} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i }}>
                 <Link href={l.href} onClick={() => setOpen(false)}>
                   {l.label}

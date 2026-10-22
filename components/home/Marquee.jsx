@@ -8,8 +8,8 @@ export default function Marquee() {
     <div className="marquee" aria-label="Popular localities">
       <div className="marquee-track">
         {row.map((l, i) => (
-          <Link key={i} href={`/properties?q=${encodeURIComponent(l)}`} tabIndex={i >= LOCALITIES.length ? -1 : undefined}>
-            {l}
+          <Link key={i} href={`/localities/${l.slug}`} tabIndex={i >= LOCALITIES.length ? -1 : undefined}>
+            {l.name}
             <span className="marquee-dot" />
           </Link>
         ))}

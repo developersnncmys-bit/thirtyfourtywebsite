@@ -1,10 +1,14 @@
 import Hero from "@/components/home/Hero";
 import Categories from "@/components/home/Categories";
 import Marquee from "@/components/home/Marquee";
+import RecentlyViewed from "@/components/home/RecentlyViewed";
 import Featured from "@/components/home/Featured";
+import TopLocalities from "@/components/home/TopLocalities";
+import NewProjects from "@/components/home/NewProjects";
 import HowItWorks from "@/components/home/HowItWorks";
 import BrokerageCalc from "@/components/home/BrokerageCalc";
 import PropertyTypes from "@/components/home/PropertyTypes";
+import ToolsStrip from "@/components/home/ToolsStrip";
 import WhyUs from "@/components/home/WhyUs";
 import OwnersSeekers from "@/components/home/OwnersSeekers";
 import AppCTA from "@/components/home/AppCTA";
@@ -16,10 +20,14 @@ export default function Home() {
       <Hero />
       <Categories />
       <Marquee />
+      <RecentlyViewed />
       <Featured />
+      <TopLocalities />
+      <NewProjects />
       <HowItWorks />
       <BrokerageCalc />
       <PropertyTypes />
+      <ToolsStrip />
       <WhyUs />
       <OwnersSeekers />
       <AppCTA />

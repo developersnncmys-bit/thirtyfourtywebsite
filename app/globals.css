@@ -548,10 +548,15 @@ p {
   padding: calc(var(--nav-h) + 40px) 0 0;
   background: linear-gradient(180deg, #025624 0%, var(--green-850) 60%, var(--green-900) 100%);
   color: #fff;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   --wave-base: var(--bg);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 .hero-glow {
   position: absolute;
@@ -771,39 +776,61 @@ p {
   z-index: 1;
 }
 
-/* ---------- Search pill (app home) ---------- */
+/* ---------- Search: portal-style tabs + pill with suggestions ---------- */
+.search-wrap {
+  position: relative;
+  z-index: 5;
+}
+.sb-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sb-tabs::-webkit-scrollbar {
+  display: none;
+}
+.sb-tabs button {
+  position: relative;
+  flex: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
+  transition: color 0.25s;
+}
+.sb-tabs button:hover {
+  color: #fff;
+}
+.sb-tabs button.on {
+  color: var(--green-900);
+}
+.sb-tabs button > span:not(.sb-tab-pill) {
+  position: relative;
+  z-index: 1;
+}
+.sb-tab-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 99px;
+  background: var(--yellow);
+}
 .searchbar {
+  position: relative;
   display: flex;
   align-items: center;
   background: #fff;
   color: var(--ink);
-  border-radius: 99px;
-  padding: 6px 6px 6px 22px;
+  border-radius: 18px;
+  padding: 6px 6px 6px 16px;
   box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.45);
-  gap: 8px;
+  gap: 6px;
 }
-.sb-mode {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-weight: 600;
+.sb-pin {
+  color: var(--green-700);
   flex: none;
-}
-.sb-mode select {
-  appearance: none;
-  -webkit-appearance: none;
-  border: 0;
-  background: transparent;
-  font-weight: 600;
-  font-size: 17px;
-  padding: 10px 22px 10px 0;
-  cursor: pointer;
-}
-.sb-mode svg {
-  position: absolute;
-  right: 0;
-  pointer-events: none;
 }
 .searchbar input {
   flex: 1;
@@ -811,40 +838,127 @@ p {
   border: 0;
   outline: 0;
   font-size: 16px;
-  color: var(--green-800);
-  padding: 12px 6px;
+  color: var(--ink);
+  padding: 14px 4px;
   background: transparent;
 }
 .searchbar input::placeholder {
-  color: var(--green-800);
-  opacity: 0.85;
+  color: var(--muted);
 }
-.sb-go {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  color: var(--green-800);
-  border-radius: 50%;
-  flex: none;
-}
-.sb-go:hover {
-  background: var(--green-100);
+.searchbar input::-webkit-search-cancel-button {
+  display: none;
 }
 .sb-near {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  border-radius: 99px;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
   color: var(--green-800);
   font-weight: 500;
-  background: var(--green-100);
+  font-size: 15px;
   flex: none;
   transition: background 0.25s;
 }
 .sb-near:hover {
-  background: var(--green-200);
+  background: var(--green-100);
+}
+.sb-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 22px;
+  height: 50px;
+  border-radius: 13px;
+  background: var(--green-800);
+  color: #fff;
+  font-weight: 600;
+  flex: none;
+  transition: background 0.25s, transform 0.25s var(--ease);
+}
+.sb-go:hover {
+  background: var(--green-700);
+}
+.sb-go:active {
+  transform: scale(0.97);
+}
+.sb-suggest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  max-height: 340px;
+  overflow-y: auto;
+  z-index: 10;
+}
+.sb-suggest-head {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 12px 4px;
+}
+.sb-suggest button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-align: left;
+  color: var(--ink);
+  transition: background 0.2s;
+}
+.sb-suggest button:hover,
+.sb-suggest button.on {
+  background: var(--bg);
+}
+.sb-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--green-100);
+  color: var(--green-800);
+  flex: none;
+}
+.sb-ico.project {
+  background: #fff6c7;
+  color: #7a5c00;
+}
+.sb-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.sb-txt b {
+  font-weight: 600;
+  font-size: 15px;
+}
+.sb-txt small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.sb-arrow {
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.sb-suggest button:hover .sb-arrow,
+.sb-suggest button.on .sb-arrow {
+  opacity: 1;
+  transform: none;
 }
 .sb-error {
   margin-top: 10px;
@@ -2184,7 +2298,7 @@ p {
 }
 .pv-body {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 40px;
   padding-top: 40px;
   padding-bottom: 40px;
@@ -2634,7 +2748,7 @@ a.contact-card:hover {
     grid-template-columns: repeat(2, 1fr);
   }
   .pv-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .pv-side {
     display: none;
@@ -2981,29 +3095,37 @@ a.contact-card:hover {
   .hero-phone {
     width: 220px;
   }
-  /* App-style pill: mode · locality · search · near-me icon.
+  /* Compact pill: pin · locality · near-me icon · search icon.
      Inputs stay at 16px so iPhones don't zoom in on focus. */
   .searchbar {
-    padding: 4px 4px 4px 14px;
+    padding: 4px 4px 4px 12px;
     gap: 2px;
-  }
-  .sb-mode select {
-    font-size: 16px;
-    padding-right: 20px;
+    border-radius: 16px;
   }
   .searchbar input {
     font-size: 16px;
     padding: 12px 4px;
   }
   .sb-near {
-    padding: 10px;
-    background: transparent;
+    padding: 10px 8px;
   }
-  .sb-near span {
+  .sb-near span,
+  .sb-go span {
     display: none;
   }
   .sb-go {
-    width: 40px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    justify-content: center;
+  }
+  .sb-tabs {
+    margin: 0 -16px 10px;
+    padding: 0 16px;
+  }
+  .sb-tabs button {
+    padding: 7px 13px;
+    font-size: 13px;
   }
   .hero-ticks {
     font-size: 13px;

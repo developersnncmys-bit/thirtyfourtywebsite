@@ -1,14 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Icon, { WhatsAppIcon } from "./Icon";
 import FavButton from "./FavButton";
+import CompareButton from "./CompareButton";
 import Reveal from "./Reveal";
-import { TYPES } from "@/lib/data";
-import { priceLabel, formatDate } from "@/lib/format";
+import EmiCalculator from "./EmiCalculator";
+import TrendChart from "./TrendChart";
+import MapView from "./MapView";
+import Stars from "./Stars";
+import { TYPES, getLocality, getProject, QUARTERS } from "@/lib/data";
+import { priceLabel, perSqft, formatDate, formatInr, areaLabel } from "@/lib/format";
 import { SITE, whatsappLink, telLink } from "@/lib/site";
+import { useRecent } from "@/lib/store";
 
 const LISTED_FOR = { buy: "Sell", rent: "Rent", pg: "PG" };
 const MODE_TAG = { buy: "For Sale", rent: "For Rent", pg: "PG" };
@@ -18,7 +24,18 @@ export default function PropertyView({ p }) {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
   const [copied, setCopied] = useState(false);
+  const [lead, setLead] = useState({ name: "", phone: "" });
+  const [leadError, setLeadError] = useState("");
+  const recent = useRecent();
   const count = p.images.length;
+  const loc = getLocality(p.localitySlug);
+  const project = p.projectId && getProject(p.projectId);
+
+  // Remember this visit for "Recently viewed"
+  useEffect(() => {
+    recent.add(p.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [p.id]);
 
   const go = (step) => {
     setDir(step);
@@ -44,21 +61,37 @@ export default function PropertyView({ p }) {
     ["Dimensions", p.dimensions],
     ["Furnishing", p.furnishing],
     ["Possession", p.possession],
-    ["Floor", p.floor != null ? (p.floor === 0 ? "Ground" : p.floor) : null],
+    ["Floor", p.floor != null ? (p.floor === 0 ? "Ground" : `${p.floor}${p.totalFloors ? ` of ${p.totalFloors}` : ""}`) : null],
     ["Approval authority", p.approval],
     ["RERA registered", p.rera ? "Yes" : "No"],
     ["Address", p.address],
     ["Landmark", p.landmark],
   ].filter(([, v]) => v != null && v !== "");
 
-  const specs = [
-    { icon: "area", value: p.area, label: p.areaUnit },
-    p.beds && { icon: "bed", value: p.beds, label: "Bedroom" },
-    p.baths && { icon: "bath", value: p.baths, label: "Bathroom" },
-    !p.beds && p.dimensions && { icon: "area", value: p.dimensions, label: "Dimensions" },
+  // Overview tiles, 99acres-style
+  const overview = [
+    { icon: "area", label: p.areaUnit === "acre" ? "Land area" : "Built-up area", value: areaLabel(p) },
+    p.bhk && { icon: "bed", label: "Configuration", value: `${p.bhk} BHK` },
+    p.baths && { icon: "bath", label: "Bathrooms", value: p.baths },
+    p.pricePerSqft && { icon: "rupee", label: "Price per sqft", value: perSqft(p.pricePerSqft) },
+    p.status && { icon: "building", label: "Status", value: p.status },
+    p.age && { icon: "sparkle", label: "Age of property", value: p.age },
+    p.deposit && { icon: "shield", label: "Security deposit", value: formatInr(p.deposit) },
+    p.tenants && { icon: "user", label: "Preferred tenants", value: p.tenants },
+    p.facing && { icon: "compass", label: "Facing", value: p.facing },
+    p.furnishing && { icon: "home", label: "Furnishing", value: p.furnishing },
   ].filter(Boolean);
 
   const enquiry = `Hi, I'm interested in "${p.title}" (${p.locality}, ${priceLabel(p)}) listed on 30Forty. Is it still available?`;
+  const phone = p.ownerPhone || SITE.phoneRaw;
+
+  const sendLead = (e) => {
+    e.preventDefault();
+    if (!lead.name.trim()) return setLeadError("Please enter your name.");
+    if (!/^[6-9]\d{9}$/.test(lead.phone.replace(/\D/g, "").slice(-10))) return setLeadError("Enter a valid 10-digit mobile number.");
+    setLeadError("");
+    window.open(whatsappLink(`${enquiry}\n\nName: ${lead.name}\nPhone: ${lead.phone}`, phone), "_blank", "noopener");
+  };
 
   return (
     <article className="pv">
@@ -136,22 +169,59 @@ export default function PropertyView({ p }) {
       <div className="container pv-body">
         <div className="pv-main">
           <Reveal>
-            <span className={`card-tag tag-${p.mode} static`}>{MODE_TAG[p.mode]}</span>
+            <div className="pv-badges">
+              <span className={`card-tag tag-${p.mode} static`}>{MODE_TAG[p.mode]}</span>
+              {p.verified && (
+                <span className="badge badge-verified">
+                  <Icon name="shield" size={14} /> Verified
+                </span>
+              )}
+              {p.rera && <span className="badge">RERA</span>}
+              <span className="badge">{p.postedBy === "builder" ? "Builder" : "Owner"}</span>
+            </div>
             <h1 className="pv-title">{p.title}</h1>
             <p className="pv-loc">
-              <Icon name="pin" size={18} /> {p.locality}, {p.city}
+              <Icon name="pin" size={18} />
+              <span>
+                {loc ? <Link href={`/localities/${loc.slug}`}>{p.locality}</Link> : p.locality}, {p.city}
+              </span>
             </p>
+            <div className="pv-pricebar">
+              <strong className="pv-price">{priceLabel(p)}</strong>
+              {p.pricePerSqft && <span className="muted">{perSqft(p.pricePerSqft)}</span>}
+              {p.deposit && <span className="muted">Deposit {formatInr(p.deposit)}</span>}
+            </div>
           </Reveal>
 
-          <div className="pv-specs">
-            {specs.map((s, i) => (
-              <Reveal key={s.label} delay={i * 0.06} className="pv-spec">
-                <Icon name={s.icon} size={24} />
-                <b>{s.value}</b>
-                <span>{s.label}</span>
+          <div className="pv-overview">
+            {overview.map((o, i) => (
+              <Reveal key={o.label} delay={(i % 4) * 0.05} className="pv-ov">
+                <span className="pv-ov-icon">
+                  <Icon name={o.icon} size={20} />
+                </span>
+                <span>
+                  <small>{o.label}</small>
+                  <b>{o.value}</b>
+                </span>
               </Reveal>
             ))}
           </div>
+
+          {project && (
+            <Reveal>
+              <Link href={`/projects/${project.id}`} className="pv-project">
+                <img src={project.images[0]} alt="" />
+                <span>
+                  <small>Part of project</small>
+                  <b>{project.name}</b>
+                  <em>
+                    by {project.builder} · {project.status}
+                  </em>
+                </span>
+                <Icon name="arrow" size={18} />
+              </Link>
+            </Reveal>
+          )}
 
           <Reveal className="pv-block">
             <h2>Property Details</h2>
@@ -183,9 +253,18 @@ export default function PropertyView({ p }) {
             </Reveal>
           )}
 
-          {p.nearby?.length > 0 && (
+          {p.mode === "buy" && p.price >= 500000 && (
             <Reveal className="pv-block">
-              <h2>Nearby</h2>
+              <h2>EMI calculator</h2>
+              <p className="muted pv-note">Pre-filled with an 80% home loan on this property. Adjust to see your monthly EMI.</p>
+              <EmiCalculator price={p.price} />
+            </Reveal>
+          )}
+
+          <Reveal className="pv-block">
+            <h2>Location</h2>
+            <MapView points={[{ id: p.id, lat: p.lat, lng: p.lng }]} single zoom={15} height={300} />
+            {p.nearby?.length > 0 && (
               <ul className="pv-near">
                 {p.nearby.map((n) => (
                   <li key={n}>
@@ -193,14 +272,44 @@ export default function PropertyView({ p }) {
                   </li>
                 ))}
               </ul>
+            )}
+          </Reveal>
+
+          {loc && (
+            <Reveal className="pv-block pv-locality">
+              <h2>About {loc.name}</h2>
+              <div className="loc-snap">
+                <div>
+                  <small>Rating</small>
+                  <b>
+                    {loc.rating.toFixed(1)} <Stars value={loc.rating} />
+                  </b>
+                  <span className="muted">{loc.reviews} reviews</span>
+                </div>
+                <div>
+                  <small>Avg. price</small>
+                  <b>{perSqft(loc.avgPrice)}</b>
+                  <span className="up">▲ {loc.change}% in 1 yr</span>
+                </div>
+                <div>
+                  <small>2 BHK rent</small>
+                  <b>{formatInr(loc.rent2bhk)}</b>
+                  <span className="muted">per month</span>
+                </div>
+              </div>
+              <h3 className="chart-title">Price trend in {loc.name} (₹/sqft)</h3>
+              <TrendChart labels={QUARTERS} values={loc.trend} height={200} caption={`Average price in ${loc.name}`} />
+              <Link href={`/localities/${loc.slug}`} className="pv-more">
+                Explore {loc.name} <Icon name="arrow" size={16} />
+              </Link>
             </Reveal>
           )}
 
           <Reveal className="pv-safety">
             <Icon name="shield" size={22} />
             <p>
-              <b>Zero brokerage.</b> You deal with the owner directly. Visit the property and check its documents before
-              paying any advance.
+              <b>Zero brokerage.</b> You deal with the {p.postedBy === "builder" ? "builder" : "owner"} directly. Visit the
+              property and check its documents before paying any advance.
             </p>
           </Reveal>
         </div>
@@ -209,29 +318,47 @@ export default function PropertyView({ p }) {
           <div className="pv-card">
             <span className="muted">Price</span>
             <strong className="pv-price">{priceLabel(p)}</strong>
+            {p.pricePerSqft && <span className="muted pv-psf">{perSqft(p.pricePerSqft)}</span>}
             <span className="pv-nob">
               <Icon name="check" size={14} strokeWidth={2.6} /> No brokerage
             </span>
-            <a className="btn btn-enquire btn-block" href={whatsappLink(enquiry, p.ownerPhone || SITE.phoneRaw)} target="_blank" rel="noopener noreferrer">
+            <a className="btn btn-enquire btn-block" href={whatsappLink(enquiry, phone)} target="_blank" rel="noopener noreferrer">
               <WhatsAppIcon /> Enquire Now
             </a>
-            <a className="btn btn-outline btn-block" href={telLink(p.ownerPhone || SITE.phoneRaw)}>
-              <Icon name="phone" size={18} /> Call owner
+            <a className="btn btn-outline btn-block" href={telLink(phone)}>
+              <Icon name="phone" size={18} /> Call {p.postedBy === "builder" ? "builder" : "owner"}
             </a>
-            <Link href="/properties" className="pv-more">
-              Browse more properties <Icon name="arrow" size={16} />
-            </Link>
+            <div className="pv-side-row">
+              <CompareButton id={p.id} />
+              <FavButton id={p.id} className="pv-fav" />
+            </div>
           </div>
+
+          <form className="pv-card pv-lead" onSubmit={sendLead} noValidate>
+            <h3>Get a call back</h3>
+            <label className="field">
+              <span>Your name</span>
+              <input value={lead.name} onChange={(e) => setLead((l) => ({ ...l, name: e.target.value }))} autoComplete="name" />
+            </label>
+            <label className="field">
+              <span>Mobile number</span>
+              <input value={lead.phone} onChange={(e) => setLead((l) => ({ ...l, phone: e.target.value }))} inputMode="tel" autoComplete="tel" />
+            </label>
+            {leadError && <p className="form-error">{leadError}</p>}
+            <button className="btn btn-green btn-block" type="submit">
+              Contact {p.postedBy === "builder" ? "builder" : "owner"}
+            </button>
+          </form>
         </aside>
       </div>
 
       {/* Sticky bar from the app: price · Enquire Now · call */}
       <div className="pv-bar">
         <strong>{priceLabel(p)}</strong>
-        <a className="btn btn-enquire" href={whatsappLink(enquiry, p.ownerPhone || SITE.phoneRaw)} target="_blank" rel="noopener noreferrer">
+        <a className="btn btn-enquire" href={whatsappLink(enquiry, phone)} target="_blank" rel="noopener noreferrer">
           Enquire Now
         </a>
-        <a className="call-round" href={telLink(p.ownerPhone || SITE.phoneRaw)} aria-label="Call owner">
+        <a className="call-round" href={telLink(phone)} aria-label="Call owner">
           <Icon name="phone" size={22} />
         </a>
       </div>

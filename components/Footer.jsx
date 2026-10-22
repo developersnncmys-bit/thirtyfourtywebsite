@@ -25,14 +25,16 @@ export default function Footer() {
           <Link href="/properties?mode=rent">Rent a home</Link>
           <Link href="/properties?mode=pg">PG / Hostels</Link>
           <Link href="/properties?cat=commercial">Commercial spaces</Link>
-          <Link href="/properties?type=agri">Agricultural land</Link>
+          <Link href="/projects">New projects</Link>
+          <Link href="/localities">Localities & prices</Link>
         </div>
         <div>
-          <h4>For owners</h4>
+          <h4>Tools</h4>
+          <Link href="/tools/emi-calculator">EMI calculator</Link>
+          <Link href="/tools/loan-eligibility">Loan eligibility</Link>
+          <Link href="/tools/area-converter">Area converter</Link>
+          <Link href="/compare">Compare properties</Link>
           <Link href="/post-property">Post property free</Link>
-          <Link href="/#how-it-works">How it works</Link>
-          <Link href="/#brokerage">Brokerage calculator</Link>
-          <Link href="/favourites">Saved properties</Link>
         </div>
         <div>
           <h4>Contact</h4>

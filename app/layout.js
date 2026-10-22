@@ -4,8 +4,10 @@ import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
+import CompareTray from "@/components/CompareTray";
 import { SITE } from "@/lib/site";
 import "./globals.css";
+import "./features.css";
 
 // The app is set in Poppins
 const poppins = Poppins({
@@ -40,6 +42,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <main>{children}</main>
           <Footer />
+          <CompareTray />
           <BottomNav />
         </SmoothScroll>
       </body>

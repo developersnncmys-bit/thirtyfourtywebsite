@@ -30,14 +30,17 @@ export default function Hero() {
 
   return (
     <section ref={ref} className="hero">
-      <motion.div className="hero-glow" style={{ scale: glow }} />
-      <div className="hero-beams" />
-      <motion.div className="hero-sky hero-sky-back" style={{ y: skyBack }}>
-        <Skyline seed={5} count={15} tone="rgba(80,190,110,.18)" windows="rgba(200,255,210,.12)" />
-      </motion.div>
-      <motion.div className="hero-sky hero-sky-front" style={{ y: skyFront }}>
-        <Skyline seed={21} count={9} tone="rgba(10,90,40,.55)" windows="rgba(246,208,11,.16)" />
-      </motion.div>
+      {/* Decorative layers clip here, so the search suggestions can overflow the hero */}
+      <div className="hero-bg" aria-hidden="true">
+        <motion.div className="hero-glow" style={{ scale: glow }} />
+        <div className="hero-beams" />
+        <motion.div className="hero-sky hero-sky-back" style={{ y: skyBack }}>
+          <Skyline seed={5} count={15} tone="rgba(80,190,110,.18)" windows="rgba(200,255,210,.12)" />
+        </motion.div>
+        <motion.div className="hero-sky hero-sky-front" style={{ y: skyFront }}>
+          <Skyline seed={21} count={9} tone="rgba(10,90,40,.55)" windows="rgba(246,208,11,.16)" />
+        </motion.div>
+      </div>
 
       <div className="container hero-grid">
         <motion.div className="hero-copy" style={{ y: copyY, opacity: copyFade }}>
