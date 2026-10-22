@@ -214,7 +214,7 @@ export default function PropertySearch() {
 
           <AnimatePresence mode="popLayout">
             {results.length ? (
-              <motion.div key="grid" layout className="grid-cards grid-cards-2">
+              <motion.div key="grid" layout className="grid-cards grid-cards-2 list-compact">
                 {results.map(({ p, d }, i) => (
                   <motion.div key={p.id} layout initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}>
                     <PropertyCard p={p} index={i} distance={d} />

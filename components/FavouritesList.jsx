@@ -13,7 +13,7 @@ export default function FavouritesList() {
     <section className="section">
       <div className="container">
         {list.length ? (
-          <div className="grid-cards">
+          <div className="grid-cards list-compact">
             {list.map((p, i) => (
               <PropertyCard key={p.id} p={p} index={i} />
             ))}

@@ -97,7 +97,8 @@ export default function HowItWorks() {
               </div>
             </div>
           </div>
-          <div className="hiw-steps">
+          {/* On phones this becomes a swipeable row, one step per slide */}
+          <div className="hiw-steps rail">
             {STEPS.map((s, i) => (
               <Step key={s.title} step={s} index={i} onActive={setActive} />
             ))}

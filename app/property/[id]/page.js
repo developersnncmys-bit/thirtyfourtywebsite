@@ -37,7 +37,7 @@ export default async function PropertyPage({ params }) {
               <span className="eyebrow">You may also like</span>
               <h2>Similar properties</h2>
             </Reveal>
-            <div className="grid-cards">
+            <div className="grid-cards rail">
               {similar.map((s, i) => (
                 <PropertyCard key={s.id} p={s} index={i} />
               ))}

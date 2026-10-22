@@ -33,7 +33,7 @@ export default function Featured() {
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}
-            className="grid-cards"
+            className="grid-cards rail"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: 20 }}
