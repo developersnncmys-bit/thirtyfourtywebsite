@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Reveal from "../Reveal";
 import Icon from "../Icon";
 import { useListings } from "../ListingsProvider";
-import { useCity } from "@/lib/city";
 
 // "Apartments, Villas and more" — property types with live counts
 const GROUPS = [
@@ -18,9 +17,7 @@ const GROUPS = [
 ];
 
 export default function TypeCounts() {
-  const all = useListings();
-  const city = useCity();
-  const list = all.filter((p) => !city || p.city === city);
+  const list = useListings();
   return (
     <section className="section tcounts">
       <div className="container">
@@ -29,7 +26,6 @@ export default function TypeCounts() {
           <h2>
             Apartments, Villas <em className="hl-green">and more</em>
           </h2>
-          <p>{city ? `in ${city}` : "across every city on Thirty Forty"}</p>
         </Reveal>
         <div className="tcounts-grid">
           {GROUPS.map((g, i) => {
@@ -43,7 +39,7 @@ export default function TypeCounts() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.7, delay: (i % 4) * 0.07, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Link href={`/properties?${g.q}${city ? `&city=${encodeURIComponent(city)}` : ""}`}>
+                <Link href={`/properties?${g.q}`}>
                   <img src={g.img} alt="" loading="lazy" className="tc-photo" />
                   <span className="tc-shade" />
                   <span className="tc-icon">

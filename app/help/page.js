@@ -1,6 +1,5 @@
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
-import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
 import { SITE, whatsappLink, telLink, helpMail } from "@/lib/site";
@@ -10,7 +9,7 @@ export const metadata = { title: "Help & Support", description: "Contact Thirty 
 // The app's Profile menu, on the web
 const MENU = [
   { href: "/premium", icon: "crown", label: "Subscriptions", sub: "Go Premium for ₹199/month" },
-  { href: "/favourites", icon: "heart", label: "Favorite", sub: "Saved properties and searches" },
+  { href: "/favourites", icon: "heart", label: "Favorite", sub: "Properties you have saved" },
   { href: "/post-property", icon: "upload", label: "Post Property", sub: "List your property free" },
   { href: "/privacy-policy", icon: "lock", label: "Privacy Policy", sub: "How we use your data" },
   { href: "/terms-and-conditions", icon: "doc", label: "Terms & Conditions", sub: "Rules for using Thirty Forty" },
@@ -28,7 +27,7 @@ export default function HelpPage() {
     <>
       <PageHero eyebrow="Help & Support" title="We're here to help" text="Questions about a listing, your account or Premium? Reach out anytime." />
       <section className="section">
-        <div className="container contact-grid">
+        <div className="container help-contact">
           <div className="contact-cards">
             {cards.map((c, i) => {
               const body = (
@@ -53,9 +52,6 @@ export default function HelpPage() {
               );
             })}
           </div>
-          <Reveal delay={0.1}>
-            <ContactForm />
-          </Reveal>
         </div>
 
         <div className="container help-menu-wrap">

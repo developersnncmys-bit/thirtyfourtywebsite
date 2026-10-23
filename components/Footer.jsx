@@ -2,7 +2,6 @@ import Link from "next/link";
 import Logo from "./Logo";
 import Icon from "./Icon";
 import BrandWaves from "./BrandWaves";
-import FooterSearches from "./FooterSearches";
 import { SITE, helpMail } from "@/lib/site";
 
 export default function Footer() {
@@ -52,7 +51,6 @@ export default function Footer() {
           </address>
         </div>
       </div>
-      <FooterSearches />
       <div className="container footer-bottom">
         <span>
           © {new Date().getFullYear()} {SITE.company}. All rights reserved.

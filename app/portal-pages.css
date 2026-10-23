@@ -381,6 +381,30 @@
   font-size: 14px;
 }
 
+/* ---------- Help & Support contact cards ---------- */
+.help-contact .contact-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.help-contact .contact-cards > *,
+.help-contact .contact-card {
+  height: 100%;
+}
+.help-contact .contact-card b {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1000px) {
+  .help-contact .contact-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .help-contact .contact-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Footer popular searches ---------- */
 .fsearch {
   margin-top: 48px;

@@ -13,7 +13,7 @@ const TAB = { buy: "buy", rent: "rent", pg: "pg" };
 
 export default async function PropertiesPage({ searchParams }) {
   const sp = await searchParams;
-  const tab = sp?.sale === "New" ? "new" : sp?.cat === "commercial" ? "commercial" : TAB[sp?.mode] || "buy";
+  const tab = sp?.type === "agri" ? "agri" : sp?.cat === "commercial" ? "commercial" : TAB[sp?.mode] || "buy";
   return (
     <>
       {/* Search strip at the top of results, like 99acres */}

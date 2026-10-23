@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import PropertyCard from "./PropertyCard";
-import MapView from "./MapView";
 import Icon from "./Icon";
 import { useListings } from "./ListingsProvider";
 import {
@@ -27,8 +26,7 @@ import {
   OCCUPANCY,
   PROFESSION,
 } from "@/lib/options";
-import { formatBudget, formatPrice, distanceKm } from "@/lib/format";
-import { useSavedSearches } from "@/lib/store";
+import { formatBudget, distanceKm } from "@/lib/format";
 
 const B_LAST = BUDGET_STEPS.length - 1;
 const A_LAST = AREA_STEPS.length - 1;
@@ -37,7 +35,7 @@ const PLURAL = { flat: "Flats", house: "Houses", villa: "Villas", plot: "Plots",
 
 const list = (v) => (v ? v.split(",").filter(Boolean) : []);
 
-// Everything the page can filter on lives in the URL, so searches can be shared and saved
+// Everything the page can filter on lives in the URL, so searches can be shared
 function fromParams(params) {
   const types = params.get("cat") === "commercial" ? COMMERCIAL_TYPES : list(params.get("type"));
   const range = (key, last) => {
@@ -66,8 +64,8 @@ function fromParams(params) {
     furn: list(params.get("furn")),
     amen: list(params.get("amen")),
     facing: list(params.get("facing")),
-    sort: params.get("sort") || (params.get("near") ? "near" : "new"),
-    view: params.get("view") || "list",
+    // Newest first, like the app feed; nearest first after "Near me"
+    sort: params.get("near") ? "near" : "new",
   };
 }
 
@@ -96,8 +94,6 @@ function toQuery(f, near) {
   if (f.furn.length) p.set("furn", f.furn.join(","));
   if (f.amen.length) p.set("amen", f.amen.join(","));
   if (f.facing.length) p.set("facing", f.facing.join(","));
-  if (f.sort !== "new" && !(near && f.sort === "near")) p.set("sort", f.sort);
-  if (f.view !== "list") p.set("view", f.view);
   if (near) p.set("near", `${near.lat},${near.lng}`);
   return p.toString();
 }
@@ -173,9 +169,6 @@ export default function PropertySearch() {
   const [f, setF] = useState(() => fromParams(params));
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [shown, setShown] = useState(PAGE);
-  const [hoverId, setHoverId] = useState(null);
-  const [savedFlash, setSavedFlash] = useState(false);
-  const saved = useSavedSearches();
   const set = (patch) => setF((s) => ({ ...s, ...patch }));
 
   const near = useMemo(() => {
@@ -248,7 +241,7 @@ export default function PropertySearch() {
   // New filters → start from the first page again and bring results into view
   const resultsRef = useRef(null);
   const firstRun = useRef(true);
-  const filterKey = JSON.stringify({ ...f, view: undefined });
+  const filterKey = JSON.stringify(f);
   useEffect(() => {
     setShown(PAGE);
     if (firstRun.current) {
@@ -294,13 +287,12 @@ export default function PropertySearch() {
   f.facing.forEach((x) => chips.push({ k: `fc${x}`, label: `${x} facing`, clear: () => set({ facing: f.facing.filter((y) => y !== x) }) }));
   if (f.q) chips.push({ k: "q", label: `“${f.q}”`, clear: () => set({ q: "" }) });
 
-  const reset = () => setF({ ...EMPTY_F, view: f.view, sort: f.sort });
-  const isMap = f.view === "map";
+  const reset = () => setF({ ...EMPTY_F, sort: f.sort });
   const buyish = f.mode !== "rent" && f.mode !== "pg";
   const isPg = f.mode === "pg";
   // "Plots for sale in Mysore", like the 99acres results heading
   const typeWord = f.types.length === 1 ? PLURAL[f.types[0]] : isPg ? "PG / Co-living" : "Properties";
-  const modeWord = f.mode === "buy" ? (f.sale === "New" ? " — new launch" : " for sale") : f.mode === "rent" ? " for rent" : "";
+  const modeWord = f.mode === "buy" ? " for sale" : f.mode === "rent" ? " for rent" : "";
   const headline = `${typeWord}${modeWord}${f.city.length === 1 ? ` in ${f.city[0]}` : ""}${near ? " near you" : ""}`;
   const cities = useMemo(() => {
     const m = new Map();
@@ -308,23 +300,8 @@ export default function PropertySearch() {
     return [...m].sort((a, b) => b[1] - a[1]).map(([c]) => c);
   }, [PROPERTIES]);
 
-  const searchQuery = toQuery({ ...f, view: "list", sort: "new" }, null);
-  const isSaved = saved.has(searchQuery);
-  const saveLabel = chips.length ? chips.slice(0, 4).map((c) => c.label).join(" · ") : "All properties";
-
-  const points = results.filter(({ p }) => p.lat).map(({ p }) => ({
-    id: p.id,
-    lat: p.lat,
-    lng: p.lng,
-    label: formatPrice(p.price),
-    title: p.title,
-    sub: [p.city, p.area && `${Math.round(p.area)} sqft`].filter(Boolean).join(" · "),
-    href: `/property/${p.id}`,
-    image: p.images[0] || null,
-  }));
-
   return (
-    <section className={`section search-page ${isMap ? "is-map" : ""}`}>
+    <section className="section search-page">
       <div className="container search-layout">
         <aside className={`filters ${filtersOpen ? "open" : ""}`} aria-label="Filters">
           <div className="filters-head">
@@ -453,29 +430,6 @@ export default function PropertySearch() {
               <button className="btn btn-outline filters-toggle" onClick={() => setFiltersOpen(true)}>
                 <Icon name="list" size={18} /> Filters{chips.length ? ` (${chips.length})` : ""}
               </button>
-              <div className="view-toggle" role="tablist" aria-label="View">
-                {[
-                  ["list", "list", "List"],
-                  ["map", "pin", "Map"],
-                ].map(([v, icon, label]) => (
-                  <button key={v} role="tab" aria-selected={f.view === v} className={f.view === v ? "on" : ""} onClick={() => set({ view: v })}>
-                    {f.view === v && <motion.span layoutId="view-pill" className="seg-pill" />}
-                    <Icon name={icon} size={16} />
-                    <span>{label}</span>
-                  </button>
-                ))}
-              </div>
-              <label className="sort">
-                <span className="sr-only">Sort by</span>
-                <select value={f.sort} onChange={(e) => set({ sort: e.target.value })}>
-                  <option value="new">Newest first</option>
-                  <option value="low">Price: low to high</option>
-                  <option value="high">Price: high to low</option>
-                                    <option value="area">Largest area</option>
-                  {near && <option value="near">Nearest first</option>}
-                </select>
-                <Icon name="chevron" size={16} />
-              </label>
             </div>
           </div>
 
@@ -501,42 +455,16 @@ export default function PropertySearch() {
                 Clear all
               </button>
             )}
-            <button
-              className={`save-search ${isSaved ? "on" : ""}`}
-              onClick={() => {
-                if (isSaved) saved.remove(searchQuery);
-                else {
-                  saved.save(searchQuery, saveLabel);
-                  setSavedFlash(true);
-                  setTimeout(() => setSavedFlash(false), 1800);
-                }
-              }}
-            >
-              <Icon name={isSaved ? "heartFilled" : "bell"} size={16} />
-              {isSaved ? "Search saved" : "Save this search"}
-            </button>
-            <AnimatePresence>
-              {savedFlash && (
-                <motion.span className="saved-flash" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
-                  Find it under Favorite → Saved searches
-                </motion.span>
-              )}
-            </AnimatePresence>
           </div>
 
-          <div className={isMap ? "map-split" : ""}>
-            {isMap && (
-              <div className="map-pane">
-                <MapView points={points} activeId={hoverId} height="100%" />
-              </div>
-            )}
+          <div>
             <div className="list-pane">
               <AnimatePresence mode="popLayout">
                 {results.length ? (
-                  <motion.div key="grid" layout className={isMap ? "grid-cards grid-cards-1 list-compact" : "row-list"}>
+                  <motion.div key="grid" layout className="row-list">
                     {results.slice(0, shown).map(({ p, d }, i) => (
                       <motion.div key={p.id} layout initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}>
-                        <PropertyCard p={p} index={i} distance={d} row={!isMap} onHover={isMap ? setHoverId : undefined} />
+                        <PropertyCard p={p} index={i} distance={d} row />
                       </motion.div>
                     ))}
                   </motion.div>

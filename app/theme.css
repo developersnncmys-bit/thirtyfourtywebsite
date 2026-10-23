@@ -255,6 +255,7 @@ html.no-scroll body {
   border-radius: 99px;
   transition: color 0.3s, background 0.3s;
 }
+.nav-links a.on,
 .nav-links button.on,
 .nav-links a:hover,
 .nav-links button:hover {

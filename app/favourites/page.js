@@ -6,7 +6,7 @@ export const metadata = { title: "Favorite" };
 export default function FavouritesPage() {
   return (
     <>
-      <PageHero eyebrow="Favorite" title="Your favourites" text="Saved properties, recently viewed and saved searches — all in one place." />
+      <PageHero eyebrow="Favorite" title="Your favourites" text="Properties you have saved with the heart." />
       <FavouritesList />
     </>
   );

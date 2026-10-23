@@ -6,10 +6,8 @@ import Icon, { WhatsAppIcon } from "./Icon";
 import FavButton from "./FavButton";
 import PropertyImage from "./PropertyImage";
 import Reveal from "./Reveal";
-import MapView from "./MapView";
 import { typeInfo } from "@/lib/options";
 import { priceLabel, perSqft, formatDate, formatInr, areaLabel } from "@/lib/format";
-import { useRecent } from "@/lib/store";
 
 const MODE_TAG = { buy: "For Sale", rent: "For Rent", pg: "PG" };
 
@@ -78,18 +76,11 @@ export default function PropertyView({ p }) {
   const [copied, setCopied] = useState(false);
   const [asking, setAsking] = useState(false);
   const [viewer, setViewer] = useState(false);
-  const recent = useRecent();
   const count = p.images.length;
   const galleryRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: galleryRef, offset: ["start start", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
-
-  // Remember this visit for "Recently viewed"
-  useEffect(() => {
-    recent.add(p.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [p.id]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("no-scroll", asking || viewer);
@@ -374,13 +365,6 @@ export default function PropertyView({ p }) {
                   </li>
                 ))}
               </ul>
-            </Reveal>
-          )}
-
-          {p.lat && (
-            <Reveal className="pv-block">
-              <h2>Location</h2>
-              <MapView points={[{ id: p.id, lat: p.lat, lng: p.lng }]} single zoom={15} height={300} />
             </Reveal>
           )}
 

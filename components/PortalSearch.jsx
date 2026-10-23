@@ -6,17 +6,16 @@ import Link from "next/link";
 import Icon from "./Icon";
 import { useListings } from "./ListingsProvider";
 import { typeInfo } from "@/lib/options";
-import { useCity } from "@/lib/city";
 
 // The 99acres-style search card: tabs, a property-type picker, a free-text box
-// that understands "2 BHK flat for rent in Mysore", Near me and voice search.
+// that understands "2 BHK flat for rent in Mysore", and Near me — the same
+// categories as the app (Buy · Rent · PG · Commercial · Agricultural Land).
 const TABS = [
   { id: "buy", label: "Buy", params: { mode: "buy" } },
   { id: "rent", label: "Rent", params: { mode: "rent" } },
-  { id: "new", label: "New Launch", dot: true, params: { mode: "buy", sale: "New" } },
+  { id: "pg", label: "PG", params: { mode: "pg" } },
   { id: "commercial", label: "Commercial", params: { cat: "commercial" } },
-  { id: "plots", label: "Plots/Land", params: {} },
-  { id: "pg", label: "PG / Co-living", params: { mode: "pg" } },
+  { id: "agri", label: "Agricultural Land/Farm Plot", params: { type: "agri" } },
 ];
 
 const KINDS = {
@@ -34,11 +33,6 @@ const KINDS = {
     { id: "showroom", label: "Showroom", types: "showroom" },
     { id: "commercial", label: "Other Commercial", types: "commercial" },
   ],
-  plots: [
-    { id: "", label: "All Plots/Land", types: "plot,agri" },
-    { id: "plot", label: "Residential Plot", types: "plot" },
-    { id: "agri", label: "Agricultural Land", types: "agri" },
-  ],
   pg: [
     { id: "", label: "All PG", pgfor: "" },
     { id: "boys", label: "Boys PG", pgfor: "Boys PG" },
@@ -46,7 +40,7 @@ const KINDS = {
     { id: "co", label: "Co-Living PG", pgfor: "Co-Living PG" },
   ],
 };
-const kindsFor = (tab) => (tab === "commercial" ? KINDS.commercial : tab === "plots" ? KINDS.plots : tab === "pg" ? KINDS.pg : KINDS.residential);
+const kindsFor = (tab) => (tab === "commercial" ? KINDS.commercial : tab === "agri" ? [{ id: "", label: "Agricultural Land", types: "agri" }] : tab === "pg" ? KINDS.pg : KINDS.residential);
 
 const WORDS = [
   [/\b(flats?|apartments?)\b/, "flat"],
@@ -93,7 +87,6 @@ function parse(text, cities) {
 export default function PortalSearch({ className = "", compact = false, initialTab = "buy" }) {
   const router = useRouter();
   const listings = useListings();
-  const pickedCity = useCity();
   const listId = useId();
   const [tab, setTab] = useState(initialTab);
   const [kind, setKind] = useState("");
@@ -103,13 +96,11 @@ export default function PortalSearch({ className = "", compact = false, initialT
   const [cursor, setCursor] = useState(-1);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
-  const [canListen, setCanListen] = useState(false);
   const kindRef = useRef(null);
   const blur = useRef(null);
   const kinds = kindsFor(tab);
   const kindLabel = kinds.find((k) => k.id === kind)?.label || kinds[0].label;
 
-  useEffect(() => setCanListen(!!(window.SpeechRecognition || window.webkitSpeechRecognition)), []);
   useEffect(() => setKind(""), [tab]);
   useEffect(() => {
     if (!kindOpen) return;
@@ -130,13 +121,11 @@ export default function PortalSearch({ className = "", compact = false, initialT
     const k = kinds.find((x) => x.id === kind);
     if (k?.types) p.set("type", k.types);
     if (k?.pgfor) p.set("pgfor", k.pgfor);
-    if (tab === "plots" && !p.get("type")) p.set("type", "plot,agri");
     const parsed = parse(text, cities.map(([c]) => c));
-    if (parsed.mode && tab !== "new" && tab !== "commercial") p.set("mode", parsed.mode);
+    if (parsed.mode && tab !== "commercial" && tab !== "agri") p.set("mode", parsed.mode);
     if (parsed.type) p.set("type", parsed.type);
     if (parsed.bhk) p.set("bhk", parsed.bhk);
-    const city = parsed.city || pickedCity;
-    if (city) p.set("city", city);
+    if (parsed.city) p.set("city", parsed.city);
     if (parsed.q) p.set("q", parsed.q);
     Object.entries(extra).forEach(([key, v]) => p.set(key, v));
     if (p.get("type") === "flat,house,villa,plot") p.delete("type");
@@ -184,28 +173,6 @@ export default function PortalSearch({ className = "", compact = false, initialT
       },
       { timeout: 10000 }
     );
-  };
-
-  const listen = () => {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return;
-    const rec = new SR();
-    rec.lang = "en-IN";
-    rec.interimResults = false;
-    setBusy("mic");
-    setError("");
-    rec.onresult = (e) => {
-      const text = e.results[0][0].transcript;
-      setQ(text);
-      setBusy("");
-      router.push(buildUrl(text));
-    };
-    rec.onerror = () => {
-      setBusy("");
-      setError("Couldn't hear that — please try again or type your search.");
-    };
-    rec.onend = () => setBusy((b) => (b === "mic" ? "" : b));
-    rec.start();
   };
 
   return (
@@ -278,7 +245,7 @@ export default function PortalSearch({ className = "", compact = false, initialT
                 setCursor((c) => Math.max(-1, c - 1));
               } else if (e.key === "Escape") setOpen(false);
             }}
-            placeholder={busy === "mic" ? "Listening…" : `Search "2 BHK flat for sale in ${pickedCity || cities[0]?.[0] || "Mysore"}"`}
+            placeholder={`Search by Locality — e.g. "2 BHK flat in ${cities[0]?.[0] || "Mysore"}"`}
             aria-label="Search by city, locality or property"
             role="combobox"
             aria-expanded={open && suggestions.length > 0}
@@ -320,13 +287,6 @@ export default function PortalSearch({ className = "", compact = false, initialT
         <button type="button" className={`psearch-round ${busy === "locate" ? "busy" : ""}`} onClick={nearMe} aria-label="Search near me" title="Near me">
           <Icon name="target" size={20} strokeWidth={2} />
         </button>
-        {canListen && (
-          <button type="button" className={`psearch-round ${busy === "mic" ? "busy" : ""}`} onClick={listen} aria-label="Search by voice" title="Voice search">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z" />
-            </svg>
-          </button>
-        )}
         <button type="submit" className="psearch-go">
           Search
         </button>

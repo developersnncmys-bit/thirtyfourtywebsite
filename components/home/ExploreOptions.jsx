@@ -8,7 +8,6 @@ import Icon from "../Icon";
 const OPTIONS = [
   { label: "Buying a home", href: "/properties?mode=buy", img: "/props/house-mysore.webp" },
   { label: "Renting a home", href: "/properties?mode=rent", img: "/props/apartment-bangalore.webp" },
-  { label: "New Launch", href: "/properties?mode=buy&sale=New", icon: "sparkle", tone: "gold", isNew: true, text: "Newly listed projects & sites" },
   { label: "Sell/Rent your property", href: "/post-property", icon: "upload", tone: "green", text: "Post FREE in 3 steps" },
   { label: "Plots/Land", href: "/properties?type=plot", img: "/props/plot-kadakola.webp" },
   { label: "PG & Co-living", href: "/properties?mode=pg", img: "/props/hostel-bangalore.webp" },

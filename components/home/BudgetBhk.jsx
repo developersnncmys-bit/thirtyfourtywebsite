@@ -5,7 +5,6 @@ import Reveal from "../Reveal";
 import Icon from "../Icon";
 import { useListings } from "../ListingsProvider";
 import { BUDGET_STEPS } from "@/lib/options";
-import { useCity } from "@/lib/city";
 
 // Budget chips map onto the search page's budget slider stops
 const idx = (v) => BUDGET_STEPS.indexOf(v);
@@ -31,10 +30,8 @@ const POPULAR = [
 
 export default function BudgetBhk() {
   const all = useListings();
-  const city = useCity();
-  const buy = all.filter((p) => p.mode === "buy" && (!city || p.city === city));
-  const homes = all.filter((p) => p.bhk && (!city || p.city === city));
-  const c = city ? `&city=${encodeURIComponent(city)}` : "";
+  const buy = all.filter((p) => p.mode === "buy");
+  const homes = all.filter((p) => p.bhk);
 
   return (
     <section className="section bb">
@@ -44,13 +41,13 @@ export default function BudgetBhk() {
             <Icon name="rupee" size={24} />
           </span>
           <h3>Explore by budget</h3>
-          <p>Properties for sale{city ? ` in ${city}` : ""}</p>
+          <p>Properties for sale</p>
           <div className="bb-chips">
             {BUDGETS.map((b, i) => {
               const n = buy.filter(b.test).length;
               return (
                 <motion.div key={b.label} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
-                  <Link href={`/properties?mode=buy&price=${b.lo}-${b.hi}${c}`} className="bb-chip">
+                  <Link href={`/properties?mode=buy&price=${b.lo}-${b.hi}`} className="bb-chip">
                     <span>{b.label}</span>
                     <em>{n}</em>
                   </Link>
@@ -64,13 +61,13 @@ export default function BudgetBhk() {
             <Icon name="bed" size={24} />
           </span>
           <h3>Choose by BHK</h3>
-          <p>Flats, houses and villas{city ? ` in ${city}` : ""}</p>
+          <p>Flats, houses and villas</p>
           <div className="bb-bhk">
             {BHKS.map((b, i) => {
               const n = homes.filter((p) => (b === 5 ? p.bhk >= 5 : p.bhk === b)).length;
               return (
                 <motion.div key={b} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.06, type: "spring", stiffness: 260, damping: 18 }}>
-                  <Link href={`/properties?bhk=${b}${c}`} className="bb-tile">
+                  <Link href={`/properties?bhk=${b}`} className="bb-tile">
                     <b>{b === 5 ? ">4" : b}</b>
                     <span>BHK</span>
                     <small>{n} listed</small>
@@ -83,7 +80,7 @@ export default function BudgetBhk() {
             <h4>Popular searches</h4>
             <div>
               {POPULAR.map(([label, q]) => (
-                <Link key={label} href={`/properties?${q}${c}`}>
+                <Link key={label} href={`/properties?${q}`}>
                   {label}
                 </Link>
               ))}
