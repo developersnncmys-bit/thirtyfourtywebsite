@@ -1,0 +1,271 @@
+/* =====================================================================
+   Phone layout polish (≤ 600px) — footer, How it works, Premium, app CTA
+   ===================================================================== */
+@media (max-width: 600px) {
+  /* ---------- Footer: compact, two link columns side by side ---------- */
+  .footer {
+    padding: 84px 0 24px;
+  }
+  .footer-waves {
+    height: 110px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 18px;
+  }
+  .footer-brand,
+  .footer-contact {
+    grid-column: 1 / -1;
+  }
+  .footer-brand {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+  .footer-brand .logo img {
+    height: 58px !important;
+  }
+  .footer-brand p {
+    max-width: 300px;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .footer .footer-tag {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  .footer .play-badge {
+    margin-top: 16px;
+  }
+  .footer h4 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--yellow);
+    letter-spacing: 0.04em;
+  }
+  .footer-col {
+    gap: 9px !important;
+    font-size: 14px !important;
+  }
+  .footer-grid a:hover {
+    transform: none;
+  }
+  .footer-contact {
+    display: grid !important;
+    gap: 10px !important;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .footer-contact h4 {
+    margin-bottom: 4px;
+  }
+  .footer-contact a,
+  .footer-contact address {
+    font-size: 14px;
+    word-break: break-word;
+  }
+  .footer-bottom {
+    margin-top: 28px;
+    padding-top: 18px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .footer-bottom nav {
+    justify-content: center;
+    gap: 6px 16px;
+  }
+
+  /* ---------- How it works: a clean numbered list ---------- */
+  .hiw-steps.rail {
+    display: grid;
+    gap: 12px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+  .hiw-step,
+  .hiw-step:last-child {
+    flex: none;
+    text-align: left;
+    align-items: stretch;
+  }
+  .phone.hiw-phone-inline {
+    display: none;
+  }
+  .hiw-card,
+  .hiw-step.on .hiw-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    padding: 18px 16px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 0;
+  }
+  .hiw-num {
+    grid-row: span 3;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    margin: 0;
+    background: var(--green-800);
+    color: var(--yellow);
+  }
+  .hiw-step h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .hiw-step p {
+    margin: 0;
+    font-size: 14px;
+  }
+  .hiw-points {
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+  .hiw-points li,
+  .hiw-step.on .hiw-points li {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+
+  /* ---------- Premium teaser ---------- */
+  .prem h2 {
+    font-size: 28px;
+  }
+  .prem-ticks li {
+    font-size: 15px;
+  }
+  .prem-card {
+    padding: 22px 18px;
+    border-radius: 24px;
+    transform: none !important;
+  }
+  .prem-price {
+    font-size: 44px;
+  }
+  .prem-pills span {
+    font-size: 12px;
+  }
+  .prem-mini {
+    gap: 8px;
+  }
+  .prem-mini span {
+    padding: 10px;
+  }
+  .prem-ring {
+    display: none;
+  }
+
+  /* ---------- App download banner ---------- */
+  .app-cta h2 {
+    font-size: 28px;
+  }
+  .app-cta-copy p {
+    font-size: 15px;
+    margin: 12px 0 20px;
+  }
+  .app-cta-logo {
+    width: auto;
+    height: 64px;
+    border-radius: 0;
+    margin-bottom: 16px;
+  }
+  .pv2-price,
+  .pv2-actions {
+    width: 100%;
+  }
+  .pv2-actions .btn {
+    flex: 1;
+    min-width: 0;
+    padding: 0 14px;
+  }
+  /* Room for the property page's sticky price bar */
+  .pv {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  /* Property page bottom bar: price stays on one line */
+  .pv-bar {
+    gap: 10px;
+  }
+  .pv-bar strong {
+    font-size: 19px;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .pv-bar .btn {
+    padding: 0 16px;
+    font-size: 15px;
+  }
+  .app-cta-phones {
+    height: 320px;
+  }
+  .acp .phone {
+    width: 150px;
+  }
+
+  /* ---------- FAQ + misc ---------- */
+  .qa-side h2 {
+    font-size: 28px;
+  }
+  .qa-actions .btn {
+    flex: 1;
+  }
+  .pcard h3 {
+    font-size: 16px;
+  }
+  .pcard-price strong {
+    font-size: 20px;
+  }
+  .btn {
+    min-height: 48px;
+    padding: 0 20px;
+  }
+  .hb-copy h1 {
+    font-size: 32px;
+  }
+}
+
+/* Very small phones (320px) */
+@media (max-width: 360px) {
+  .post-pill {
+    font-size: 12px;
+    padding: 6px 6px 6px 11px;
+  }
+  .post-pill .free {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+  .logo img {
+    height: 40px !important;
+  }
+  .footer-grid {
+    gap: 22px 12px;
+  }
+  .psearch-tabs > button {
+    padding: 14px 8px 12px;
+    font-size: 13px;
+  }
+  .hb-copy h1 {
+    font-size: 29px;
+  }
+  .bb-bhk {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .rcard-cols {
+    grid-template-columns: 1fr;
+  }
+  .rcard-cols > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}

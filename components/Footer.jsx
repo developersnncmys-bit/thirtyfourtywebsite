@@ -22,7 +22,7 @@ export default function Footer() {
             </span>
           </a>
         </div>
-        <div>
+        <div className="footer-col">
           <h4>Explore</h4>
           <Link href="/properties?mode=buy">Buy property</Link>
           <Link href="/properties?mode=rent">Rent a home</Link>
@@ -31,14 +31,15 @@ export default function Footer() {
           <Link href="/properties?type=plot">Plots</Link>
           <Link href="/properties?type=agri">Agricultural Land/Farm Plot</Link>
         </div>
-        <div>
+        <div className="footer-col">
           <h4>Thirty Forty</h4>
           <Link href="/post-property">Post Property FREE</Link>
           <Link href="/premium">Go Premium</Link>
+          <Link href="/account">My Account</Link>
           <Link href="/favourites">Favorite</Link>
           <Link href="/help">Help &amp; Support</Link>
         </div>
-        <div>
+        <div className="footer-contact">
           <h4>Contact</h4>
           <a href={helpMail}>
             <Icon name="mail" size={16} /> {SITE.email}

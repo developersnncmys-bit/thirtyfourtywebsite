@@ -1439,7 +1439,7 @@ a.contact-card:hover {
 @media (max-width: 900px) {
   :root {
     --nav-h: 66px;
-    --bottom-h: calc(74px + env(safe-area-inset-bottom));
+    --bottom-h: 0px;
   }
   .section {
     padding: 80px 0;

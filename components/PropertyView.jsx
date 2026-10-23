@@ -8,21 +8,37 @@ import PropertyImage from "./PropertyImage";
 import Reveal from "./Reveal";
 import { typeInfo } from "@/lib/options";
 import { priceLabel, perSqft, formatDate, formatInr, areaLabel } from "@/lib/format";
+import { sendEnquiry } from "@/lib/appApi";
+import { useSession, loginHref } from "@/lib/session";
 
 const MODE_TAG = { buy: "For Sale", rent: "For Rent", pg: "PG" };
 
+// The app's "Send Enquiry" flow: needs an account, saves the enquiry with
+// the API (the owner sees it in their Dashboard + gets a notification), then
+// offers WhatsApp to the owner with the app's message
 function EnquiryDialog({ p, onClose }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const user = useSession();
+  const [note, setNote] = useState("");
+  const [state, setState] = useState("ask"); // ask · sending · sent
   const [error, setError] = useState("");
-  const send = (e) => {
+
+  const whatsapp = user
+    ? `/contact-owner/${p.id}?${new URLSearchParams({ via: "whatsapp", name: user.userName, phone: `+91 ${user.phone}` })}`
+    : "#";
+
+  const send = async (e) => {
     e.preventDefault();
-    if (!name.trim()) return setError("Please enter your name.");
-    if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, "").slice(-10))) return setError("Enter a valid 10-digit mobile number.");
-    const q = new URLSearchParams({ via: "whatsapp", name: name.trim(), phone: phone.trim() });
-    window.open(`/contact-owner/${p.id}?${q}`, "_blank", "noopener");
-    onClose();
+    setError("");
+    setState("sending");
+    try {
+      await sendEnquiry({ userName: user.userName, phoneNumber: user.phone, userId: user.id, propertyId: p.id, message: note.trim() });
+      setState("sent");
+    } catch (err) {
+      setError(err.message);
+      setState("ask");
+    }
   };
+
   return (
     <motion.div className="dialog-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
       <motion.form
@@ -38,33 +54,67 @@ function EnquiryDialog({ p, onClose }) {
         aria-modal="true"
         aria-labelledby="enq-title"
       >
-        <span className="dialog-icon">
-          <WhatsAppIcon size={26} />
-        </span>
-        <h3 id="enq-title">Send Enquiry</h3>
-        <p className="muted">
-          {p.owner} will get your message on WhatsApp with your name and number.
-        </p>
-        <label className="field">
-          <span>Your name</span>
-          <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" autoFocus />
-        </label>
-        <label className="field">
-          <span>Phone Number</span>
-          <div className="field-prefix">
-            <em>+91</em>
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" autoComplete="tel-national" placeholder="Enter your number" />
-          </div>
-        </label>
-        {error && <p className="form-error">{error}</p>}
-        <div className="dialog-actions">
-          <button type="button" className="btn btn-outline" onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn-enquire">
-            Yes, Send
-          </button>
-        </div>
+        {!user ? (
+          <>
+            <span className="dialog-icon lock">
+              <Icon name="lock" size={24} />
+            </span>
+            <h3 id="enq-title">Login to send enquiry</h3>
+            <p className="muted">Log in with your phone number so {p.owner} can see who is enquiring and reach you back.</p>
+            <div className="dialog-actions">
+              <button type="button" className="btn btn-outline" onClick={onClose}>
+                Cancel
+              </button>
+              <Link href={loginHref(`/property/${p.id}?enquire=1`)} className="btn btn-green">
+                Login / Sign up
+              </Link>
+            </div>
+          </>
+        ) : state === "sent" ? (
+          <>
+            <motion.span className="dialog-icon" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 14 }}>
+              <Icon name="check" size={26} strokeWidth={3} />
+            </motion.span>
+            <h3 id="enq-title">Enquiry sent successfully</h3>
+            <p className="muted">{p.owner} has been notified and can see your enquiry in their Dashboard. Message them on WhatsApp to speed things up.</p>
+            <div className="dialog-actions">
+              <button type="button" className="btn btn-outline" onClick={onClose}>
+                Close
+              </button>
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-enquire" onClick={onClose}>
+                <WhatsAppIcon /> WhatsApp owner
+              </a>
+            </div>
+          </>
+        ) : (
+          <>
+            <span className="dialog-icon">
+              <WhatsAppIcon size={26} />
+            </span>
+            <h3 id="enq-title">Send Enquiry</h3>
+            <p className="muted">Are you sure you want to send this enquiry? {p.owner} will get your name and number ({`+91 ${user.phone}`}).</p>
+            <label className="field">
+              <span>Message (optional)</span>
+              <textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. I'd like to visit this weekend" />
+            </label>
+            {error && (
+              <p className="form-error">
+                {error}{" "}
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                  WhatsApp the owner instead
+                </a>
+              </p>
+            )}
+            <div className="dialog-actions">
+              <button type="button" className="btn btn-outline" onClick={onClose}>
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-enquire" disabled={state === "sending"}>
+                {state === "sending" ? "Sending…" : "Yes, Send"}
+              </button>
+            </div>
+          </>
+        )}
       </motion.form>
     </motion.div>
   );
@@ -76,6 +126,8 @@ export default function PropertyView({ p }) {
   const [copied, setCopied] = useState(false);
   const [asking, setAsking] = useState(false);
   const [viewer, setViewer] = useState(false);
+  const user = useSession();
+  const mine = !!user?.id && user.id === p.ownerId;
   const count = p.images.length;
   const galleryRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: galleryRef, offset: ["start start", "end start"] });
@@ -193,9 +245,15 @@ export default function PropertyView({ p }) {
                 <Icon name="share" />
               </button>
               <FavButton id={p.id} className="sq-btn light" />
-              <button className="btn btn-enquire" onClick={() => setAsking(true)}>
-                <WhatsAppIcon /> Contact Owner
-              </button>
+              {mine ? (
+                <Link href={`/post-property?edit=${p.id}`} className="btn btn-green">
+                  <Icon name="doc" size={18} /> Edit property
+                </Link>
+              ) : (
+                <button className="btn btn-enquire" onClick={() => setAsking(true)}>
+                  <WhatsAppIcon /> Contact Owner
+                </button>
+              )}
             </div>
           </motion.div>
         </div>
@@ -340,9 +398,15 @@ export default function PropertyView({ p }) {
                 <b>{p.owner}</b>
                 <small>Posted on {formatDate(p.postedOn)}</small>
               </span>
-              <button className="btn btn-enquire" onClick={() => setAsking(true)}>
-                <WhatsAppIcon /> Contact Owner
-              </button>
+              {mine ? (
+                <Link href={`/post-property?edit=${p.id}`} className="btn btn-green">
+                  <Icon name="doc" size={18} /> Edit property
+                </Link>
+              ) : (
+                <button className="btn btn-enquire" onClick={() => setAsking(true)}>
+                  <WhatsAppIcon /> Contact Owner
+                </button>
+              )}
             </div>
           </Reveal>
 
@@ -382,12 +446,26 @@ export default function PropertyView({ p }) {
             <span className="muted">Price</span>
             <strong className="pv-price">{priceLabel(p)}</strong>
             {p.pricePerSqft && <span className="muted pv-psf">{perSqft(p.pricePerSqft)}</span>}
-            <button className="btn btn-enquire btn-block" onClick={() => setAsking(true)}>
-              <WhatsAppIcon /> Contact Owner
-            </button>
-            <a className="btn btn-outline btn-block" href={`/contact-owner/${p.id}?via=call`}>
-              <Icon name="phone" size={18} /> Call
-            </a>
+            {mine ? (
+              <>
+                <p className="pv-mine">This is your property</p>
+                <Link href={`/post-property?edit=${p.id}`} className="btn btn-green btn-block">
+                  <Icon name="doc" size={18} /> Edit property
+                </Link>
+                <Link href="/dashboard" className="btn btn-outline btn-block">
+                  <Icon name="dashboard" size={18} /> Enquiries in Dashboard
+                </Link>
+              </>
+            ) : (
+              <>
+                <button className="btn btn-enquire btn-block" onClick={() => setAsking(true)}>
+                  <WhatsAppIcon /> Contact Owner
+                </button>
+                <a className="btn btn-outline btn-block" href={`/contact-owner/${p.id}?via=call`}>
+                  <Icon name="phone" size={18} /> Call
+                </a>
+              </>
+            )}
             <div className="pv-side-row">
               <span className="muted">Save to Favorite</span>
               <FavButton id={p.id} className="pv-fav" />
@@ -399,12 +477,20 @@ export default function PropertyView({ p }) {
       {/* Sticky bar from the app: price · Enquire Now · call */}
       <div className="pv-bar">
         <strong>{priceLabel(p)}</strong>
-        <button className="btn btn-enquire" onClick={() => setAsking(true)}>
-          Enquire Now
-        </button>
-        <a className="call-round" href={`/contact-owner/${p.id}?via=call`} aria-label="Call">
-          <Icon name="phone" size={22} />
-        </a>
+        {mine ? (
+          <Link href={`/post-property?edit=${p.id}`} className="btn btn-green">
+            Edit property
+          </Link>
+        ) : (
+          <>
+            <button className="btn btn-enquire" onClick={() => setAsking(true)}>
+              Enquire Now
+            </button>
+            <a className="call-round" href={`/contact-owner/${p.id}?via=call`} aria-label="Call">
+              <Icon name="phone" size={22} />
+            </a>
+          </>
+        )}
       </div>
 
       <AnimatePresence>{asking && <EnquiryDialog p={p} onClose={() => setAsking(false)} />}</AnimatePresence>

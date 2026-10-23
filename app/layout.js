@@ -2,16 +2,18 @@ import { Poppins } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
-import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import ListingsProvider from "@/components/ListingsProvider";
 import { getListings } from "@/lib/listings";
+import { FavouritesSync } from "@/lib/store";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 import "./features.css";
 import "./theme.css";
 import "./portal.css";
 import "./portal-pages.css";
+import "./account.css";
+import "./mobile.css";
 
 // The app is set in Poppins
 const poppins = Poppins({
@@ -45,10 +47,10 @@ export default async function RootLayout({ children }) {
         <Preloader />
         <ListingsProvider listings={listings}>
           <SmoothScroll>
+            <FavouritesSync />
             <Navbar />
             <main>{children}</main>
             <Footer />
-            <BottomNav />
           </SmoothScroll>
         </ListingsProvider>
       </body>

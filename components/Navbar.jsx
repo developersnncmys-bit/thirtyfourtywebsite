@@ -7,6 +7,7 @@ import Logo from "./Logo";
 import Icon from "./Icon";
 import { SITE } from "@/lib/site";
 import { useShortlist } from "@/lib/store";
+import { useSession, signOut } from "@/lib/session";
 
 // The app's categories: Buy · Rent · PG · Commercial · Agricultural Land
 const LINKS = [
@@ -27,6 +28,9 @@ const DRAWER = [
   { href: "/properties?mode=pg", label: "PG", icon: "bed" },
   { href: "/properties?cat=commercial", label: "Commercial", icon: "building" },
   { href: "/properties?type=agri", label: "Agricultural Land/Farm Plot", icon: "tractor" },
+  { href: "/enquiries", label: "Enquiry", icon: "chat" },
+  { href: "/dashboard", label: "My Property List", icon: "dashboard" },
+  { href: "/notifications", label: "Notifications", icon: "bell" },
   { href: "/favourites", label: "Favorite", icon: "heart" },
   { href: "/premium", label: "Subscriptions", icon: "crown" },
   { href: "/help", label: "Help & Support", icon: "help" },
@@ -51,6 +55,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const shortlist = useShortlist();
+  const user = useSession();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const me = mounted ? user : null;
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
 
@@ -83,9 +91,25 @@ export default function Navbar() {
               <Icon name="heart" />
               {shortlist.ids.length > 0 && <span className="nav-count">{shortlist.ids.length}</span>}
             </Link>
-            <Link href="/help" className="nav-icon" aria-label="Help & Support">
-              <Icon name="help" />
-            </Link>
+            {me ? (
+              <Link href="/notifications" className="nav-icon" aria-label="Notifications">
+                <Icon name="bell" />
+              </Link>
+            ) : (
+              <Link href="/help" className="nav-icon" aria-label="Help & Support">
+                <Icon name="help" />
+              </Link>
+            )}
+            {me ? (
+              <Link href="/account" className="nav-me" aria-label="My Profile">
+                <span>{(me.userName || "U").charAt(0).toUpperCase()}</span>
+                <b>{(me.userName || "Profile").split(" ")[0]}</b>
+              </Link>
+            ) : (
+              <Link href="/login" className="nav-login">
+                <Icon name="user" size={18} /> Login
+              </Link>
+            )}
             <Link href="/post-property" className="post-pill">
               Post Property <span className="free">FREE</span>
             </Link>
@@ -111,7 +135,19 @@ export default function Navbar() {
             >
               <div className="drawer-head">
                 <Logo height={52} />
-                <p>{SITE.tagline}</p>
+                {me ? (
+                  <Link href="/account" className="drawer-me" onClick={() => setOpen(false)}>
+                    <span>{(me.userName || "U").charAt(0).toUpperCase()}</span>
+                    <span>
+                      <b>{me.userName || "User"}</b>
+                      <small>+91 {me.phone}</small>
+                    </span>
+                  </Link>
+                ) : (
+                  <Link href="/login" className="btn btn-yellow btn-sm drawer-login" onClick={() => setOpen(false)}>
+                    <Icon name="user" size={16} /> Login / Sign up
+                  </Link>
+                )}
               </div>
               <nav>
                 {DRAWER.map((l, i) => (
@@ -123,6 +159,11 @@ export default function Navbar() {
                   </motion.div>
                 ))}
               </nav>
+              {me && (
+                <button className="drawer-logout" onClick={() => (signOut(), setOpen(false))}>
+                  <Icon name="back" size={18} /> Logout
+                </button>
+              )}
               <a className="btn btn-yellow btn-block" href={SITE.playStore} target="_blank" rel="noopener noreferrer">
                 <Icon name="playFilled" size={18} /> Get the app
               </a>
