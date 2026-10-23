@@ -5,28 +5,35 @@ import { AnimatePresence, motion } from "framer-motion";
 import PropertyCard from "./PropertyCard";
 import MapView from "./MapView";
 import Icon from "./Icon";
+import { useListings } from "./ListingsProvider";
 import {
-  PROPERTIES,
   MODES,
   TYPES,
   BUDGET_STEPS,
   AREA_STEPS,
   COMMERCIAL_TYPES,
-  LOCALITIES,
   BHK_OPTIONS,
-  POSTED_BY,
-  STATUSES,
+  BATHROOMS,
+  POSSESSION,
   SALE_TYPES,
   FURNISHING,
   AMENITIES,
   FACINGS,
-} from "@/lib/data";
+  APPROVAL_AUTHORITIES,
+  POSTED_SINCE,
+  DIET,
+  PG_FOR,
+  FOOD,
+  OCCUPANCY,
+  PROFESSION,
+} from "@/lib/options";
 import { formatBudget, formatPrice, distanceKm } from "@/lib/format";
 import { useSavedSearches } from "@/lib/store";
 
 const B_LAST = BUDGET_STEPS.length - 1;
 const A_LAST = AREA_STEPS.length - 1;
 const PAGE = 12;
+const PLURAL = { flat: "Flats", house: "Houses", villa: "Villas", plot: "Plots", office: "Office spaces", shop: "Shops", showroom: "Showrooms", commercial: "Commercial properties", agri: "Agricultural land" };
 
 const list = (v) => (v ? v.split(",").filter(Boolean) : []);
 
@@ -41,13 +48,19 @@ function fromParams(params) {
     mode: params.get("mode") || "",
     types,
     q: params.get("q") || "",
-    loc: list(params.get("loc")),
+    city: list(params.get("city")),
     bhk: list(params.get("bhk")).map(Number),
+    bath: list(params.get("bath")).map(Number),
     budget: range("price", B_LAST),
     area: range("area", A_LAST),
-    by: params.get("by") || "",
-    verified: params.get("verified") === "1",
+    since: params.get("since") || "",
     rera: params.get("rera") === "1",
+    approval: list(params.get("approval")),
+    diet: params.get("diet") || "",
+    pgFor: list(params.get("pgfor")),
+    food: list(params.get("food")),
+    occ: list(params.get("occ")),
+    prof: list(params.get("prof")),
     status: params.get("status") || "",
     sale: params.get("sale") || "",
     furn: list(params.get("furn")),
@@ -65,13 +78,19 @@ function toQuery(f, near) {
   if (isCommercial) p.set("cat", "commercial");
   else if (f.types.length) p.set("type", f.types.join(","));
   if (f.q) p.set("q", f.q);
-  if (f.loc.length) p.set("loc", f.loc.join(","));
+  if (f.city.length) p.set("city", f.city.join(","));
   if (f.bhk.length) p.set("bhk", f.bhk.join(","));
+  if (f.bath.length) p.set("bath", f.bath.join(","));
   if (f.budget[0] !== 0 || f.budget[1] !== B_LAST) p.set("price", f.budget.join("-"));
   if (f.area[0] !== 0 || f.area[1] !== A_LAST) p.set("area", f.area.join("-"));
-  if (f.by) p.set("by", f.by);
-  if (f.verified) p.set("verified", "1");
+  if (f.since) p.set("since", f.since);
   if (f.rera) p.set("rera", "1");
+  if (f.approval.length) p.set("approval", f.approval.join(","));
+  if (f.diet) p.set("diet", f.diet);
+  if (f.pgFor.length) p.set("pgfor", f.pgFor.join(","));
+  if (f.food.length) p.set("food", f.food.join(","));
+  if (f.occ.length) p.set("occ", f.occ.join(","));
+  if (f.prof.length) p.set("prof", f.prof.join(","));
   if (f.status) p.set("status", f.status);
   if (f.sale) p.set("sale", f.sale);
   if (f.furn.length) p.set("furn", f.furn.join(","));
@@ -148,6 +167,7 @@ function Dual({ steps, value, onChange, fmt, label }) {
 }
 
 export default function PropertySearch() {
+  const PROPERTIES = useListings();
   const params = useSearchParams();
   const router = useRouter();
   const [f, setF] = useState(() => fromParams(params));
@@ -184,39 +204,46 @@ export default function PropertySearch() {
     const term = f.q.trim().toLowerCase();
     const [bLo, bHi] = [BUDGET_STEPS[f.budget[0]], f.budget[1] === B_LAST ? Infinity : BUDGET_STEPS[f.budget[1]]];
     const [aLo, aHi] = [AREA_STEPS[f.area[0]], f.area[1] === A_LAST ? Infinity : AREA_STEPS[f.area[1]]];
+    const sinceDays = POSTED_SINCE.find((x) => x.id === f.since)?.days || 0;
     const hits = PROPERTIES.filter(
       (p) =>
         (!f.mode || p.mode === f.mode) &&
         (!f.types.length || f.types.includes(p.type)) &&
-        (!f.loc.length || f.loc.includes(p.localitySlug)) &&
+        (!f.city.length || f.city.includes(p.city)) &&
         (!f.bhk.length || f.bhk.some((b) => (b === 5 ? (p.bhk || 0) >= 5 : p.bhk === b))) &&
+        (!f.bath.length || f.bath.includes(p.baths)) &&
         (f.budget[0] === 0 || p.price >= bLo) &&
         p.price <= bHi &&
-        (f.area[0] === 0 || (p.areaUnit === "sqft" && p.area >= aLo)) &&
-        (f.area[1] === A_LAST || (p.areaUnit === "sqft" && p.area <= aHi)) &&
-        (!f.by || p.postedBy === f.by) &&
-        (!f.verified || p.verified) &&
+        (f.area[0] === 0 || (p.area && p.area >= aLo)) &&
+        (f.area[1] === A_LAST || (p.area && p.area <= aHi)) &&
+        (!sinceDays || Date.now() - new Date(p.postedOn).getTime() <= sinceDays * 864e5) &&
         (!f.rera || p.rera) &&
+        (!f.approval.length || f.approval.includes(p.approval)) &&
+        (!f.diet || p.diet === f.diet) &&
+        (!f.pgFor.length || f.pgFor.includes(p.category)) &&
+        (!f.food.length || f.food.includes(p.food)) &&
+        (!f.occ.length || f.occ.some((o) => p.occupancy.includes(o))) &&
+        (!f.prof.length || f.prof.some((o) => p.profession.includes(o))) &&
         (!f.status || p.status === f.status) &&
         (!f.sale || p.saleType === f.sale) &&
         (!f.furn.length || f.furn.includes(p.furnishing)) &&
         (!f.amen.length || f.amen.every((a) => p.amenities?.includes(a))) &&
         (!f.facing.length || f.facing.includes(p.facing)) &&
-        (!term || `${p.title} ${p.locality} ${p.city} ${p.address} ${p.landmark}`.toLowerCase().includes(term))
-    ).map((p) => ({ p, d: near ? distanceKm(near, p) : null }));
+        (!term || `${p.title} ${p.city} ${p.address || ""} ${p.landmark || ""} ${p.dimensions || ""}`.toLowerCase().includes(term))
+    ).map((p) => ({ p, d: near && p.lat ? distanceKm(near, p) : null }));
 
     const psf = (x) => x.p.pricePerSqft ?? Infinity;
     const by = {
-      new: (a, b) => b.p.postedOn.localeCompare(a.p.postedOn),
+      new: (a, b) => String(b.p.postedOn).localeCompare(String(a.p.postedOn)),
       low: (a, b) => a.p.price - b.p.price,
       high: (a, b) => b.p.price - a.p.price,
       psfLow: (a, b) => psf(a) - psf(b),
       psfHigh: (a, b) => (b.p.pricePerSqft ?? -1) - (a.p.pricePerSqft ?? -1),
-      area: (a, b) => b.p.area - a.p.area,
-      near: (a, b) => (a.d ?? 0) - (b.d ?? 0),
+      area: (a, b) => (b.p.area || 0) - (a.p.area || 0),
+      near: (a, b) => (a.d ?? Infinity) - (b.d ?? Infinity),
     };
     return hits.sort(by[f.sort] || by.new);
-  }, [f, near]);
+  }, [f, near, PROPERTIES]);
 
   // New filters → start from the first page again and bring results into view
   const resultsRef = useRef(null);
@@ -242,8 +269,9 @@ export default function PropertySearch() {
   const chips = [];
   if (f.mode) chips.push({ k: "mode", label: MODES.find((m) => m.id === f.mode)?.label, clear: () => set({ mode: "" }) });
   f.types.forEach((t) => chips.push({ k: `t${t}`, label: TYPES.find((x) => x.id === t)?.label, clear: () => set({ types: f.types.filter((x) => x !== t) }) }));
-  f.loc.forEach((l) => chips.push({ k: `l${l}`, label: LOCALITIES.find((x) => x.slug === l)?.name, clear: () => set({ loc: f.loc.filter((x) => x !== l) }) }));
-  f.bhk.forEach((b) => chips.push({ k: `b${b}`, label: `${b === 5 ? "5+" : b} BHK`, clear: () => set({ bhk: f.bhk.filter((x) => x !== b) }) }));
+  f.city.forEach((l) => chips.push({ k: `l${l}`, label: l, clear: () => set({ city: f.city.filter((x) => x !== l) }) }));
+  f.bhk.forEach((b) => chips.push({ k: `b${b}`, label: BHK_OPTIONS.find((x) => x.id === b)?.label, clear: () => set({ bhk: f.bhk.filter((x) => x !== b) }) }));
+  f.bath.forEach((b) => chips.push({ k: `ba${b}`, label: `${b} Bath`, clear: () => set({ bath: f.bath.filter((x) => x !== b) }) }));
   if (f.budget[0] !== 0 || f.budget[1] !== B_LAST)
     chips.push({
       k: "price",
@@ -252,9 +280,13 @@ export default function PropertySearch() {
     });
   if (f.area[0] !== 0 || f.area[1] !== A_LAST)
     chips.push({ k: "area", label: `${AREA_STEPS[f.area[0]]} – ${f.area[1] === A_LAST ? "Max" : AREA_STEPS[f.area[1]]} sqft`, clear: () => set({ area: [0, A_LAST] }) });
-  if (f.by) chips.push({ k: "by", label: `By ${f.by}`, clear: () => set({ by: "" }) });
-  if (f.verified) chips.push({ k: "ver", label: "Verified", clear: () => set({ verified: false }) });
+  if (f.since) chips.push({ k: "since", label: POSTED_SINCE.find((x) => x.id === f.since)?.label, clear: () => set({ since: "" }) });
   if (f.rera) chips.push({ k: "rera", label: "RERA", clear: () => set({ rera: false }) });
+  f.approval.forEach((x) => chips.push({ k: `ap${x}`, label: x, clear: () => set({ approval: f.approval.filter((y) => y !== x) }) }));
+  if (f.diet) chips.push({ k: "diet", label: f.diet, clear: () => set({ diet: "" }) });
+  [["pgFor", "pg"], ["food", "fd"], ["occ", "oc"], ["prof", "pr"]].forEach(([key, k]) =>
+    f[key].forEach((x) => chips.push({ k: `${k}${x}`, label: x, clear: () => set({ [key]: f[key].filter((y) => y !== x) }) }))
+  );
   if (f.status) chips.push({ k: "st", label: f.status, clear: () => set({ status: "" }) });
   if (f.sale) chips.push({ k: "sale", label: f.sale, clear: () => set({ sale: "" }) });
   f.furn.forEach((x) => chips.push({ k: `f${x}`, label: x, clear: () => set({ furn: f.furn.filter((y) => y !== x) }) }));
@@ -265,20 +297,30 @@ export default function PropertySearch() {
   const reset = () => setF({ ...EMPTY_F, view: f.view, sort: f.sort });
   const isMap = f.view === "map";
   const buyish = f.mode !== "rent" && f.mode !== "pg";
+  const isPg = f.mode === "pg";
+  // "Plots for sale in Mysore", like the 99acres results heading
+  const typeWord = f.types.length === 1 ? PLURAL[f.types[0]] : isPg ? "PG / Co-living" : "Properties";
+  const modeWord = f.mode === "buy" ? (f.sale === "New" ? " — new launch" : " for sale") : f.mode === "rent" ? " for rent" : "";
+  const headline = `${typeWord}${modeWord}${f.city.length === 1 ? ` in ${f.city[0]}` : ""}${near ? " near you" : ""}`;
+  const cities = useMemo(() => {
+    const m = new Map();
+    PROPERTIES.forEach((p) => p.city && m.set(p.city, (m.get(p.city) || 0) + 1));
+    return [...m].sort((a, b) => b[1] - a[1]).map(([c]) => c);
+  }, [PROPERTIES]);
 
   const searchQuery = toQuery({ ...f, view: "list", sort: "new" }, null);
   const isSaved = saved.has(searchQuery);
   const saveLabel = chips.length ? chips.slice(0, 4).map((c) => c.label).join(" · ") : "All properties";
 
-  const points = results.map(({ p }) => ({
+  const points = results.filter(({ p }) => p.lat).map(({ p }) => ({
     id: p.id,
     lat: p.lat,
     lng: p.lng,
     label: formatPrice(p.price),
     title: p.title,
-    sub: `${p.locality} · ${p.area} ${p.areaUnit}`,
+    sub: [p.city, p.area && `${Math.round(p.area)} sqft`].filter(Boolean).join(" · "),
     href: `/property/${p.id}`,
-    image: p.images[0],
+    image: p.images[0] || null,
   }));
 
   return (
@@ -298,7 +340,7 @@ export default function PropertySearch() {
           <div className="filters-scroll" data-lenis-prevent>
             <div className="search-field">
               <Icon name="search" size={20} />
-              <input type="search" value={f.q} onChange={(e) => set({ q: e.target.value })} placeholder="Search locality, landmark…" aria-label="Search by area or locality" />
+              <input type="search" value={f.q} onChange={(e) => set({ q: e.target.value })} placeholder="Search by area or locality" aria-label="Search by area or locality" />
             </div>
 
             <div className="seg seg-3" role="tablist" aria-label="Looking to">
@@ -313,58 +355,88 @@ export default function PropertySearch() {
             <Group title="Budget" count={f.budget[0] !== 0 || f.budget[1] !== B_LAST ? 1 : 0}>
               <Dual steps={BUDGET_STEPS} value={f.budget} onChange={(budget) => set({ budget })} fmt={formatBudget} label="budget" />
             </Group>
-            <Group title="Property type" count={f.types.length}>
-              <Chips options={TYPES} value={f.types} onToggle={(id) => set({ types: toggleIn(f.types, id) })} />
-            </Group>
-            <Group title="BHK" count={f.bhk.length}>
-              <Chips options={BHK_OPTIONS} value={f.bhk} onToggle={(b) => set({ bhk: toggleIn(f.bhk, b) })} render={(b) => `${b === 5 ? "5+" : b} BHK`} />
-            </Group>
-            <Group title="Locality" count={f.loc.length}>
-              <Chips options={LOCALITIES.map((l) => ({ id: l.slug, label: l.name }))} value={f.loc} onToggle={(s) => set({ loc: toggleIn(f.loc, s) })} />
-            </Group>
-            <Group title="Posted by" count={f.by ? 1 : 0}>
-              <Chips options={POSTED_BY} value={f.by} onToggle={(id) => set({ by: f.by === id ? "" : id })} />
-            </Group>
+            {!isPg && (
+              <Group title="Property Type" count={f.types.length}>
+                <Chips options={TYPES} value={f.types} onToggle={(id) => set({ types: toggleIn(f.types, id) })} />
+              </Group>
+            )}
+            {cities.length > 0 && (
+              <Group title="City" count={f.city.length}>
+                <Chips options={cities} value={f.city} onToggle={(c) => set({ city: toggleIn(f.city, c) })} />
+              </Group>
+            )}
+            {isPg ? (
+              <>
+                <Group title="Boys / Girls" count={f.pgFor.length}>
+                  <Chips options={PG_FOR} value={f.pgFor} onToggle={(x) => set({ pgFor: toggleIn(f.pgFor, x) })} />
+                </Group>
+                <Group title="Occupancy Type" count={f.occ.length}>
+                  <Chips options={OCCUPANCY} value={f.occ} onToggle={(x) => set({ occ: toggleIn(f.occ, x) })} />
+                </Group>
+                <Group title="Food" count={f.food.length} defaultOpen={false}>
+                  <Chips options={FOOD} value={f.food} onToggle={(x) => set({ food: toggleIn(f.food, x) })} />
+                </Group>
+                <Group title="Profession" count={f.prof.length} defaultOpen={false}>
+                  <Chips options={PROFESSION} value={f.prof} onToggle={(x) => set({ prof: toggleIn(f.prof, x) })} />
+                </Group>
+              </>
+            ) : (
+              <>
+                <Group title="Bedrooms" count={f.bhk.length}>
+                  <Chips options={BHK_OPTIONS} value={f.bhk} onToggle={(b) => set({ bhk: toggleIn(f.bhk, b) })} />
+                </Group>
+                <Group title="Covered Area (sqft)" count={f.area[0] !== 0 || f.area[1] !== A_LAST ? 1 : 0} defaultOpen={false}>
+                  <Dual steps={AREA_STEPS} value={f.area} onChange={(area) => set({ area })} fmt={(v) => `${v.toLocaleString("en-IN")}`} label="area" />
+                </Group>
+                {buyish && (
+                  <>
+                    <Group title="Possession Status" count={f.status ? 1 : 0} defaultOpen={false}>
+                      <Chips options={POSSESSION} value={f.status} onToggle={(s) => set({ status: f.status === s ? "" : s })} />
+                    </Group>
+                    <Group title="Sale Type" count={f.sale ? 1 : 0} defaultOpen={false}>
+                      <Chips options={SALE_TYPES} value={f.sale} onToggle={(s) => set({ sale: f.sale === s ? "" : s })} />
+                    </Group>
+                  </>
+                )}
+                {f.mode === "rent" && (
+                  <Group title="Diet" count={f.diet ? 1 : 0} defaultOpen={false}>
+                    <Chips options={DIET} value={f.diet} onToggle={(s) => set({ diet: f.diet === s ? "" : s })} />
+                  </Group>
+                )}
+              </>
+            )}
             <div className="toggles">
-              <label className="switch">
-                <input type="checkbox" checked={f.verified} onChange={(e) => set({ verified: e.target.checked })} />
-                <span className="switch-ui" />
-                <span>
-                  <b>Verified only</b>
-                  <small>Listings checked by the 30Forty team</small>
-                </span>
-              </label>
               <label className="switch">
                 <input type="checkbox" checked={f.rera} onChange={(e) => set({ rera: e.target.checked })} />
                 <span className="switch-ui" />
                 <span>
-                  <b>RERA approved</b>
-                  <small>Registered with Karnataka RERA</small>
+                  <b>RERA registered properties</b>
+                  <small>Only listings with a RERA number</small>
                 </span>
               </label>
             </div>
-            <Group title="Area (sqft)" count={f.area[0] !== 0 || f.area[1] !== A_LAST ? 1 : 0} defaultOpen={false}>
-              <Dual steps={AREA_STEPS} value={f.area} onChange={(area) => set({ area })} fmt={(v) => `${v.toLocaleString("en-IN")}`} label="area" />
+            <Group title="Posted since" count={f.since ? 1 : 0} defaultOpen={false}>
+              <Chips options={POSTED_SINCE} value={f.since} onToggle={(id) => set({ since: f.since === id ? "" : id })} />
             </Group>
-            {buyish && (
+            {!isPg && (
               <>
-                <Group title="Construction status" count={f.status ? 1 : 0} defaultOpen={false}>
-                  <Chips options={STATUSES} value={f.status} onToggle={(s) => set({ status: f.status === s ? "" : s })} />
+                <Group title="Furnishing Status" count={f.furn.length} defaultOpen={false}>
+                  <Chips options={FURNISHING} value={f.furn} onToggle={(x) => set({ furn: toggleIn(f.furn, x) })} />
                 </Group>
-                <Group title="Sale type" count={f.sale ? 1 : 0} defaultOpen={false}>
-                  <Chips options={SALE_TYPES} value={f.sale} onToggle={(s) => set({ sale: f.sale === s ? "" : s })} />
+                <Group title="Amenities" count={f.amen.length} defaultOpen={false}>
+                  <Chips options={AMENITIES} value={f.amen} onToggle={(x) => set({ amen: toggleIn(f.amen, x) })} />
+                </Group>
+                <Group title="Facing" count={f.facing.length} defaultOpen={false}>
+                  <Chips options={FACINGS} value={f.facing} onToggle={(x) => set({ facing: toggleIn(f.facing, x) })} />
+                </Group>
+                <Group title="Bathroom" count={f.bath.length} defaultOpen={false}>
+                  <Chips options={BATHROOMS} value={f.bath} onToggle={(x) => set({ bath: toggleIn(f.bath, x) })} />
+                </Group>
+                <Group title="Approval Authority" count={f.approval.length} defaultOpen={false}>
+                  <Chips options={APPROVAL_AUTHORITIES} value={f.approval} onToggle={(x) => set({ approval: toggleIn(f.approval, x) })} />
                 </Group>
               </>
             )}
-            <Group title="Furnishing" count={f.furn.length} defaultOpen={false}>
-              <Chips options={FURNISHING} value={f.furn} onToggle={(x) => set({ furn: toggleIn(f.furn, x) })} />
-            </Group>
-            <Group title="Amenities" count={f.amen.length} defaultOpen={false}>
-              <Chips options={AMENITIES} value={f.amen} onToggle={(x) => set({ amen: toggleIn(f.amen, x) })} />
-            </Group>
-            <Group title="Facing" count={f.facing.length} defaultOpen={false}>
-              <Chips options={FACINGS} value={f.facing} onToggle={(x) => set({ facing: toggleIn(f.facing, x) })} />
-            </Group>
           </div>
 
           <button className="btn btn-green btn-block filters-apply" onClick={() => setFiltersOpen(false)}>
@@ -374,11 +446,9 @@ export default function PropertySearch() {
 
         <div className="results" ref={resultsRef}>
           <div className="results-bar">
-            <p>
-              <b>{results.length}</b> {results.length === 1 ? "property" : "properties"}
-              {f.loc.length === 1 ? ` in ${LOCALITIES.find((l) => l.slug === f.loc[0])?.name}` : " in Mysuru"}
-              {near && " near you"}
-            </p>
+            <h1 className="results-title">
+              {results.length} {results.length === 1 ? "result" : "results"} <span>| {headline}</span>
+            </h1>
             <div className="results-tools">
               <button className="btn btn-outline filters-toggle" onClick={() => setFiltersOpen(true)}>
                 <Icon name="list" size={18} /> Filters{chips.length ? ` (${chips.length})` : ""}
@@ -401,9 +471,7 @@ export default function PropertySearch() {
                   <option value="new">Newest first</option>
                   <option value="low">Price: low to high</option>
                   <option value="high">Price: high to low</option>
-                  <option value="psfLow">₹/sqft: low to high</option>
-                  <option value="psfHigh">₹/sqft: high to low</option>
-                  <option value="area">Largest area</option>
+                                    <option value="area">Largest area</option>
                   {near && <option value="near">Nearest first</option>}
                 </select>
                 <Icon name="chevron" size={16} />
@@ -450,7 +518,7 @@ export default function PropertySearch() {
             <AnimatePresence>
               {savedFlash && (
                 <motion.span className="saved-flash" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
-                  Find it under Shortlist → Saved searches
+                  Find it under Favorite → Saved searches
                 </motion.span>
               )}
             </AnimatePresence>
@@ -465,10 +533,10 @@ export default function PropertySearch() {
             <div className="list-pane">
               <AnimatePresence mode="popLayout">
                 {results.length ? (
-                  <motion.div key="grid" layout className={`grid-cards ${isMap ? "grid-cards-1" : "grid-cards-2"} list-compact`}>
+                  <motion.div key="grid" layout className={isMap ? "grid-cards grid-cards-1 list-compact" : "row-list"}>
                     {results.slice(0, shown).map(({ p, d }, i) => (
                       <motion.div key={p.id} layout initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}>
-                        <PropertyCard p={p} index={i} distance={d} onHover={isMap ? setHoverId : undefined} />
+                        <PropertyCard p={p} index={i} distance={d} row={!isMap} onHover={isMap ? setHoverId : undefined} />
                       </motion.div>
                     ))}
                   </motion.div>
@@ -477,8 +545,8 @@ export default function PropertySearch() {
                     <span className="empty-icon">
                       <Icon name="search" size={34} />
                     </span>
-                    <h3>No properties match yet</h3>
-                    <p>Try another locality or remove a filter.</p>
+                    <h3>There is no such property</h3>
+                    <p>{PROPERTIES.length ? "Try another locality or remove a filter." : "Listings could not be loaded right now. Please refresh in a moment."}</p>
                     <button className="btn btn-green" onClick={reset}>
                       Clear filters
                     </button>

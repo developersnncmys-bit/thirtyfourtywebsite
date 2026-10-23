@@ -1,18 +1,17 @@
 import Link from "next/link";
-import Skyline from "@/components/Skyline";
+import PageHero from "@/components/PageHero";
 
 export default function NotFound() {
   return (
-    <section className="page-hero not-found">
-      <Skyline seed={4} count={14} tone="rgba(80,190,110,.14)" windows="rgba(246,208,11,.1)" className="page-hero-sky" />
-      <div className="container page-hero-inner center">
-        <span className="eyebrow eyebrow-light">404</span>
-        <h1>This property isn&apos;t listed</h1>
-        <p>The page you&apos;re looking for has moved or never existed.</p>
+    <PageHero eyebrow="404" title="This property isn't listed" text="The page you're looking for has moved, or the listing was removed in the app.">
+      <div className="nf-actions">
         <Link href="/properties" className="btn btn-yellow">
           Browse properties
         </Link>
+        <Link href="/" className="btn btn-ghost">
+          Go home
+        </Link>
       </div>
-    </section>
+    </PageHero>
   );
 }

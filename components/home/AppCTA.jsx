@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Phone from "../Phone";
 import Skyline from "../Skyline";
-import Wave from "../Wave";
+import BrandWaves from "../BrandWaves";
 import Icon from "../Icon";
 import { SITE } from "@/lib/site";
 
@@ -29,11 +29,11 @@ export default function AppCTA() {
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img src="/logo-mark.png" alt="" className="app-cta-logo" />
+          <img src="/brand/logo-light.png" alt="3040 Property" className="app-cta-logo" />
           <h2>
-            Start your property journey <em className="hl">the smart way</em>
+            Real estate, <em className="hl">simplified</em> — in your pocket
           </h2>
-          <p>Download 30Forty today and buy, sell or rent — with zero brokerage.</p>
+          <p>Download Thirty Forty to post properties, get enquiry notifications, manage your listings from the Dashboard and chat with buyers on WhatsApp.</p>
           <a className="play-badge play-badge-lg" href={SITE.playStore} target="_blank" rel="noopener noreferrer">
             <Icon name="playFilled" size={26} />
             <span>
@@ -43,14 +43,16 @@ export default function AppCTA() {
         </motion.div>
         <div className="app-cta-phones">
           <motion.div style={{ y: down, rotate: rotA }} className="acp acp-1">
-            <Phone src="/screens/search.jpg" alt="30Forty search screen" />
+            <Phone src="/screens/search.jpg" alt="Thirty Forty search screen" />
           </motion.div>
           <motion.div style={{ y: up, rotate: rotB }} className="acp acp-2">
-            <Phone src="/screens/splash.jpg" alt="30Forty splash screen" />
+            <Phone src="/screens/splash.jpg" alt="Thirty Forty splash screen" />
           </motion.div>
         </div>
       </div>
-      <Wave className="app-cta-wave" />
+      <div className="app-cta-waves">
+        <BrandWaves />
+      </div>
     </section>
   );
 }

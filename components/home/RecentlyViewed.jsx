@@ -3,13 +3,14 @@ import Link from "next/link";
 import Reveal from "../Reveal";
 import PropertyCard from "../PropertyCard";
 import Icon from "../Icon";
+import { useListings } from "../ListingsProvider";
 import { useRecent } from "@/lib/store";
-import { PROPERTIES } from "@/lib/data";
 
 // Only appears for returning visitors who have opened a listing before
 export default function RecentlyViewed() {
   const { ids } = useRecent();
-  const items = ids.map((id) => PROPERTIES.find((p) => p.id === id)).filter(Boolean).slice(0, 6);
+  const listings = useListings();
+  const items = ids.map((id) => listings.find((p) => p.id === id)).filter(Boolean).slice(0, 3);
   if (!items.length) return null;
   return (
     <section className="section recent">
@@ -20,7 +21,7 @@ export default function RecentlyViewed() {
             <h2>Recently viewed</h2>
           </Reveal>
           <Link href="/favourites" className="btn btn-outline">
-            Shortlist <Icon name="arrow" size={16} />
+            Favorite <Icon name="arrow" size={16} />
           </Link>
         </div>
         <div className="grid-cards rail">

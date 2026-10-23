@@ -1,4 +1,4 @@
-// Line icons in the style of the 30Forty app (Material-like, 24px grid)
+// Line icons in the style of the Thirty Forty app (Material-like, 24px grid)
 const PATHS = {
   home: <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z" />,
   key: (
@@ -108,9 +108,40 @@ const PATHS = {
       <path d="m15.5 8.5-2 5-5 2 2-5z" />
     </>
   ),
+  upload: <path d="M12 16V4M7 9l5-5 5 5M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" />,
+  image: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="9" cy="10" r="2" />
+      <path d="m21 16-5-5-9 9" />
+    </>
+  ),
+  crown: <path d="M3 7l4.5 4L12 5l4.5 6L21 7l-2 11H5z M5 21h14" />,
+  rocket: (
+    <>
+      <path d="M12 15l-3-3c1-4 4-8 10-9-1 6-5 9-9 10z" />
+      <path d="M9 12l-4 1-2 3 4 1M12 15l-1 4 3 2 1-4M15 9h.01" />
+    </>
+  ),
+  dashboard: <path d="M4 4h7v9H4zM13 4h7v5h-7zM13 11h7v9h-7zM4 15h7v5H4z" />,
+  calendar: <path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4" />,
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </>
+  ),
+  doc: <path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6" />,
+  help: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17.5h.01" />
+    </>
+  ),
+  star: <path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" />,
 };
 
-const FILLED = { heartFilled: "heart", playFilled: "play" };
+const FILLED = { heartFilled: "heart", playFilled: "play", starFilled: "star" };
 
 export default function Icon({ name, size = 22, className, strokeWidth = 1.8, ...rest }) {
   const fill = FILLED[name];

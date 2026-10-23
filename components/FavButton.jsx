@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Icon from "./Icon";
-import { useFavourites } from "@/lib/favourites";
+import { useShortlist as useFavourites } from "@/lib/store";
 
 export default function FavButton({ id, className = "" }) {
   const { has, toggle } = useFavourites();

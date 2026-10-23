@@ -1,0 +1,436 @@
+{
+ "title": "TERMS AND CONDITIONS",
+ "subtitle": "Rules and guidelines for using the Thirty Forty Platform",
+ "effective": "Effective Date: June 1, 2025",
+ "updated": "Last Updated: June 2025",
+ "blocks": [
+  {
+   "type": "sectiontitle",
+   "text": "01 | Introduction and Acceptance"
+  },
+  {
+   "type": "highlight",
+   "text": "These Terms and Conditions (“Terms”) govern your access to and use of the Thirty Forty mobile application and website, operated by Nakshatra Namaha Creations Pvt. Ltd. By registering an account or using any part of the Platform, you agree to be bound by these Terms and all incorporated policies."
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty is a zero-brokerage real estate platform. We provide technology infrastructure that enables property owners, landlords, buyers, and tenants to connect directly. We do not act as a real estate agent, broker, or consultant. Nakshatra Namaha Creations Pvt. Ltd. is referred to as “Thirty Forty”, “we”, “us”, or “our” throughout these Terms."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "02 | Definitions"
+  },
+  {
+   "type": "bullet",
+   "text": "“Owner” means a registered user who lists a property for sale or rent on the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "“Seeker” means a registered user who searches for properties to buy, rent, or lease through the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "“Listing” means a property advertisement created and posted by an Owner on the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "“Lead” means a contact request or enquiry initiated by a Seeker to an Owner."
+  },
+  {
+   "type": "bullet",
+   "text": "“Subscription Plan” means a paid plan purchased by Owners or Seekers to access premium features."
+  },
+  {
+   "type": "bullet",
+   "text": "“Free Listing” means a basic property listing available without charge, subject to Platform limits."
+  },
+  {
+   "type": "bullet",
+   "text": "“Verified Listing” means a Listing for which Thirty Forty has conducted or assisted in identity and ownership verification."
+  },
+  {
+   "type": "bullet",
+   "text": "“Platform Content” means all text, images, software, data, map integrations, and materials available on the Platform."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "03 | Account Registration"
+  },
+  {
+   "type": "subtitle",
+   "text": "3.1 Eligibility"
+  },
+  {
+   "type": "paragraph",
+   "text": "You must be at least 18 years of age and legally capable of entering into a binding agreement under the Indian Contract Act, 1872. By registering, you represent that you meet these requirements and that all information provided is accurate and complete."
+  },
+  {
+   "type": "subtitle",
+   "text": "3.2 Account Responsibility"
+  },
+  {
+   "type": "bullet",
+   "text": "You are solely responsible for maintaining the confidentiality of your login credentials."
+  },
+  {
+   "type": "bullet",
+   "text": "You are responsible for all activity that occurs under your account."
+  },
+  {
+   "type": "bullet",
+   "text": "You must notify us immediately at info@nakshatranamahacreations.com if you suspect any unauthorised use of your account."
+  },
+  {
+   "type": "bullet",
+   "text": "Each individual or entity may maintain only one active account per user type (Owner or Seeker) unless prior written approval is granted."
+  },
+  {
+   "type": "subtitle",
+   "text": "3.3 KYC Verification"
+  },
+  {
+   "type": "paragraph",
+   "text": "Owners who list properties are required to complete identity verification (Aadhaar, PAN, or other government-issued document) before their Listings are published or marked as Verified. Thirty Forty reserves the right to reject or remove Listings where verification cannot be completed satisfactorily."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "04 | Listing Guidelines for Owners"
+  },
+  {
+   "type": "subtitle",
+   "text": "4.1 Listing Accuracy"
+  },
+  {
+   "type": "bullet",
+   "text": "Owners must provide accurate, complete, and honest descriptions of the property including location, size, amenities, photographs, price, and ownership status."
+  },
+  {
+   "type": "bullet",
+   "text": "Owners must not list properties they do not own or do not have the legal right to rent or sell."
+  },
+  {
+   "type": "bullet",
+   "text": "Photographs uploaded must genuinely represent the listed property. Stock images, AI-generated images, or photographs of different properties are strictly prohibited."
+  },
+  {
+   "type": "bullet",
+   "text": "Pricing must reflect the actual asking price or rent. Deliberately misleading prices to attract leads are not permitted."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.2 Property Compliance"
+  },
+  {
+   "type": "bullet",
+   "text": "Owners are solely responsible for ensuring their property complies with all applicable local, state, and national laws including building regulations, occupancy certificates, RERA registration (where applicable), and any required municipal approvals."
+  },
+  {
+   "type": "bullet",
+   "text": "Owners must not list properties under legal dispute, court-ordered stay, or any encumbrance without clearly disclosing such status in the Listing."
+  },
+  {
+   "type": "bullet",
+   "text": "For rental listings, the Owner is responsible for ensuring the property is habitable, safe, and maintained as described."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.3 RERA Compliance"
+  },
+  {
+   "type": "paragraph",
+   "text": "For projects or properties that require registration under the Real Estate (Regulation and Development) Act, 2016, Owners and developers must provide their valid RERA registration number in the Listing. Thirty Forty reserves the right to remove Listings that fail to comply with RERA obligations."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.4 Listing Duration and Renewal"
+  },
+  {
+   "type": "bullet",
+   "text": "Free Listings are valid for a specified duration as communicated on the Platform (typically 30 to 60 days) and must be renewed or updated thereafter."
+  },
+  {
+   "type": "bullet",
+   "text": "Paid subscription Listings remain active for the duration of the subscription plan."
+  },
+  {
+   "type": "bullet",
+   "text": "Thirty Forty reserves the right to deactivate Listings that appear outdated, inaccurate, or no longer available."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "05 | Seeker Guidelines"
+  },
+  {
+   "type": "bullet",
+   "text": "Seekers must use the Platform for genuine property search purposes only."
+  },
+  {
+   "type": "bullet",
+   "text": "Seekers must not use contact information obtained through the Platform to solicit Owners for any purpose other than the property enquiry for which it was shared."
+  },
+  {
+   "type": "bullet",
+   "text": "Seekers must not resell, redistribute, or commercially exploit any Owner contact details or property data obtained from the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "Seekers agree not to engage in any form of harassment, fraud, or misrepresentation when communicating with Owners."
+  },
+  {
+   "type": "bullet",
+   "text": "Seekers acknowledge that Thirty Forty does not guarantee the accuracy of all Listings and are encouraged to independently verify all property details before making any payment or commitment."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "06 | Subscription Plans and Payments"
+  },
+  {
+   "type": "subtitle",
+   "text": "6.1 Subscription Tiers"
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty offers free and paid subscription plans for Owners and Seekers. Paid plans unlock features such as additional Listings, featured placement, verified badges, priority lead access, and direct contact unlocks. Details of current plans and pricing are available on the Platform and are subject to change with prior notice."
+  },
+  {
+   "type": "subtitle",
+   "text": "6.2 Payment Processing"
+  },
+  {
+   "type": "bullet",
+   "text": "All payments are processed in Indian Rupees (INR) through secure third-party payment gateways."
+  },
+  {
+   "type": "bullet",
+   "text": "Thirty Forty does not store full card or bank account details on its servers."
+  },
+  {
+   "type": "bullet",
+   "text": "Subscription fees are charged in advance for the chosen plan duration (monthly or annual)."
+  },
+  {
+   "type": "bullet",
+   "text": "GST at the applicable rate is charged additionally on all paid plans and will be shown at checkout."
+  },
+  {
+   "type": "subtitle",
+   "text": "6.3 Auto-Renewal"
+  },
+  {
+   "type": "paragraph",
+   "text": "Subscription plans with auto-renewal enabled will be automatically renewed at the end of each billing cycle using your saved payment method. You may disable auto-renewal at any time from your account settings before the renewal date."
+  },
+  {
+   "type": "subtitle",
+   "text": "6.4 Lead Credits and Unlock Charges"
+  },
+  {
+   "type": "paragraph",
+   "text": "Certain Platform features require spending Lead Credits or paying unlock charges to access Owner contact information or to promote a Listing. All such charges are communicated clearly before any transaction and are governed by these Terms and the applicable Refund Policy."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "07 | Prohibited Conduct"
+  },
+  {
+   "type": "highlight",
+   "text": "Any violation of these prohibited conduct rules may result in immediate account suspension, permanent ban, forfeiture of subscription fees, removal of Listings, and legal action where warranted."
+  },
+  {
+   "type": "paragraph",
+   "text": "You must not:"
+  },
+  {
+   "type": "bullet",
+   "text": "Post false, misleading, or fraudulent Listings or property information."
+  },
+  {
+   "type": "bullet",
+   "text": "List properties you do not own or have no legal authority to rent or sell."
+  },
+  {
+   "type": "bullet",
+   "text": "Scrape, harvest, or systematically collect property data, Owner information, or Seeker information from the Platform using automated tools."
+  },
+  {
+   "type": "bullet",
+   "text": "Impersonate any person or entity or misrepresent your affiliation with any person or organisation."
+  },
+  {
+   "type": "bullet",
+   "text": "Use the Platform to conduct or facilitate any illegal real estate transaction."
+  },
+  {
+   "type": "bullet",
+   "text": "Attempt to bypass or circumvent the Platform by directing Seekers or Owners to transact outside Thirty Forty to avoid Platform fees."
+  },
+  {
+   "type": "bullet",
+   "text": "Post content that is defamatory, obscene, harassing, discriminatory, or in violation of any applicable law."
+  },
+  {
+   "type": "bullet",
+   "text": "Introduce malware, viruses, bots, or automated scripts to the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "Manipulate the review or rating system through fake reviews, incentivised reviews, or competitor attacks."
+  },
+  {
+   "type": "bullet",
+   "text": "Use the Platform for commercial purposes other than genuine property listing or searching without prior written consent from Thirty Forty."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "08 | Disclaimer of Warranties"
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty is a platform intermediary and does not independently verify all property Listings, ownership claims, or representations made by Owners. We provide the Platform on an “as is” and “as available” basis without warranties of any kind, express or implied, including:"
+  },
+  {
+   "type": "bullet",
+   "text": "Accuracy, completeness, or reliability of any Listing or property information."
+  },
+  {
+   "type": "bullet",
+   "text": "Ownership or legal title to any listed property."
+  },
+  {
+   "type": "bullet",
+   "text": "Fitness of any property for any particular purpose."
+  },
+  {
+   "type": "bullet",
+   "text": "Uninterrupted, error-free, or secure operation of the Platform at all times."
+  },
+  {
+   "type": "highlight",
+   "text": "Thirty Forty strongly recommends that Seekers conduct independent due diligence including physical site visits, title verification, encumbrance certificate checks, and legal consultation before finalising any property transaction."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "09 | Limitation of Liability"
+  },
+  {
+   "type": "paragraph",
+   "text": "To the maximum extent permitted under applicable Indian law, Thirty Forty and Nakshatra Namaha Creations Pvt. Ltd. shall not be liable for:"
+  },
+  {
+   "type": "bullet",
+   "text": "Any loss, damage, or expense arising from reliance on information in any Listing."
+  },
+  {
+   "type": "bullet",
+   "text": "Any financial loss resulting from a property transaction facilitated through the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "Any dispute between Seekers and Owners, including fraud, misrepresentation, or failure to complete a transaction."
+  },
+  {
+   "type": "bullet",
+   "text": "Loss of data due to technical failures, cyberattacks, or force majeure events."
+  },
+  {
+   "type": "bullet",
+   "text": "Any indirect, incidental, special, consequential, or punitive damages of any kind."
+  },
+  {
+   "type": "paragraph",
+   "text": "Our total aggregate liability for any claim arising from your use of the Platform shall not exceed the total amount paid by you to Thirty Forty in the 12 months immediately preceding the event giving rise to the claim."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "10 | Intellectual Property"
+  },
+  {
+   "type": "paragraph",
+   "text": "All Platform content including the “Thirty Forty” brand name, logo, trademarks, software, design elements, map integrations, and data are the exclusive property of Nakshatra Namaha Creations Pvt. Ltd. and are protected under the Copyright Act, 1957, Trade Marks Act, 1999, and other applicable intellectual property laws."
+  },
+  {
+   "type": "paragraph",
+   "text": "By submitting a Listing, you grant Thirty Forty a non-exclusive, royalty-free, transferable licence to use, display, reproduce, and distribute your Listing content (including photographs and descriptions) for the purposes of operating and promoting the Platform."
+  },
+  {
+   "type": "paragraph",
+   "text": "You must not reproduce, copy, scrape, or create derivative works from any Platform content without the prior written consent of Thirty Forty."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "11 | Indemnification"
+  },
+  {
+   "type": "paragraph",
+   "text": "You agree to indemnify and hold harmless Thirty Forty, Nakshatra Namaha Creations Pvt. Ltd., its directors, officers, employees, and agents from and against any and all claims, damages, liabilities, losses, and costs (including legal fees) arising out of:"
+  },
+  {
+   "type": "bullet",
+   "text": "Your breach of any provision of these Terms."
+  },
+  {
+   "type": "bullet",
+   "text": "Your Listing, property, or conduct on the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "Any third-party claims arising from content or information you submit to the Platform."
+  },
+  {
+   "type": "bullet",
+   "text": "Your violation of any applicable law or regulation."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "12 | Governing Law and Jurisdiction"
+  },
+  {
+   "type": "paragraph",
+   "text": "These Terms are governed by the laws of India. Any dispute arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts in Bangalore, Karnataka. Before initiating legal proceedings, you agree to make good faith efforts to resolve disputes by contacting us at info@nakshatranamahacreations.com."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "13 | Termination"
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty reserves the right to suspend or permanently terminate your account, with or without prior notice, if you violate these Terms or engage in any conduct that is harmful to other users, the Platform, or applicable law. Upon termination:"
+  },
+  {
+   "type": "bullet",
+   "text": "All active Listings under your account may be removed immediately."
+  },
+  {
+   "type": "bullet",
+   "text": "Any unused Lead Credits or subscription balance at the time of termination for cause are forfeited."
+  },
+  {
+   "type": "bullet",
+   "text": "You remain liable for all obligations incurred prior to termination."
+  },
+  {
+   "type": "paragraph",
+   "text": "You may also close your account at any time by contacting info@nakshatranamahacreations.com. Unused subscription days may be eligible for a prorated refund as per our Refund Policy."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "14 | Modifications to Terms"
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty reserves the right to update or modify these Terms at any time. Changes will be communicated through in-app notifications and email to your registered address. Your continued use of the Platform after the updated Terms take effect constitutes acceptance of the revised Terms."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "15 | Contact Information"
+  },
+  {
+   "type": "highlight",
+   "text": "Thirty Forty Support\\nAddress: #36 A-Wing, 2nd Main, Srinagara Badavane, Srinagara, Mysore - 570008\\nCall: +91 80889 93253\\nMail: thirtyfortysupport@gmail.com"
+  },
+  {
+   "type": "highlight",
+   "text": "Nakshatra Namaha Creations Pvt. Ltd.\\nEmail: info@nakshatranamahacreations.com\\nPhone: +91 99005 66466\\nWebsite: nakshatranamahacreations.com\\nAddress: #392, Darshan Plaza, 1st Floor, Dwarakanagar, Channasandra, Bangalore 560098\\nOffices: Bengaluru | Mumbai (Thane West) | Mysuru | Hyderabad"
+  }
+ ]
+}

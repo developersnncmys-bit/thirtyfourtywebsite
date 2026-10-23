@@ -1,0 +1,441 @@
+{
+ "title": "PRIVACY POLICY",
+ "subtitle": "How Thirty Forty collects, uses, and protects your data",
+ "effective": "Effective Date: June 1, 2025",
+ "updated": "Last Updated: June 2025",
+ "blocks": [
+  {
+   "type": "sectiontitle",
+   "text": "01 | Introduction"
+  },
+  {
+   "type": "highlight",
+   "text": "Thirty Forty is a technology-driven real estate platform that connects property owners, sellers, landlords, tenants, and buyers directly, without brokerage. This Privacy Policy explains how we collect, use, share, and protect your personal information when you use the Thirty Forty mobile application and website (collectively referred to as the “Platform”)."
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty is operated by Nakshatra Namaha Creations Pvt. Ltd., registered under the Companies Act, 2013, with its corporate office at #392, Darshan Plaza, 1st Floor, Dwarakanagar, Channasandra, Bangalore 560098. By creating an account or using the Platform, you consent to the practices described in this Privacy Policy."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "02 | Information We Collect"
+  },
+  {
+   "type": "subtitle",
+   "text": "2.1 Information You Provide Directly"
+  },
+  {
+   "type": "bullet",
+   "text": "Full name, email address, mobile number, and date of birth during registration."
+  },
+  {
+   "type": "bullet",
+   "text": "Profile photograph and government-issued identity proof (Aadhaar card, PAN card, Passport, Driving Licence) for KYC verification."
+  },
+  {
+   "type": "bullet",
+   "text": "Property details entered by owners or landlords, including address, photographs, floor plans, area (in square feet/yards), pricing, and amenities."
+  },
+  {
+   "type": "bullet",
+   "text": "Financial information such as rental expectations, sale price, EMI preferences, or home loan requirements."
+  },
+  {
+   "type": "bullet",
+   "text": "Messages, enquiries, and communication sent through the Platform’s in-app messaging system."
+  },
+  {
+   "type": "bullet",
+   "text": "Reviews, ratings, and feedback submitted after property visits or transactions."
+  },
+  {
+   "type": "bullet",
+   "text": "Support tickets and any documents you share with our team during dispute resolution."
+  },
+  {
+   "type": "subtitle",
+   "text": "2.2 Information Collected Automatically"
+  },
+  {
+   "type": "bullet",
+   "text": "Device information: device model, operating system, unique device identifiers, mobile network."
+  },
+  {
+   "type": "bullet",
+   "text": "Log data: IP address, pages visited, time on Platform, search queries, property listings viewed."
+  },
+  {
+   "type": "bullet",
+   "text": "Location data: with your permission, precise GPS location to display properties near you and enable map-based search."
+  },
+  {
+   "type": "bullet",
+   "text": "Cookies and browser storage on the web Platform to maintain sessions and remember preferences."
+  },
+  {
+   "type": "bullet",
+   "text": "Usage analytics: filter preferences, shortlisted properties, contact requests, and listing interaction patterns."
+  },
+  {
+   "type": "subtitle",
+   "text": "2.3 Information from Third Parties"
+  },
+  {
+   "type": "bullet",
+   "text": "Login data if you register using Google Sign-In or Apple Sign-In."
+  },
+  {
+   "type": "bullet",
+   "text": "Payment verification data from gateway partners (Razorpay or similar)."
+  },
+  {
+   "type": "bullet",
+   "text": "Credit score or financial eligibility data from partners where home loan assistance is offered (only with your explicit consent)."
+  },
+  {
+   "type": "bullet",
+   "text": "Address and identity verification from government digital services (DigiLocker integration if applicable)."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "03 | How We Use Your Information"
+  },
+  {
+   "type": "subtitle",
+   "text": "3.1 Core Platform Operations"
+  },
+  {
+   "type": "bullet",
+   "text": "Creating and managing your account as a property seeker, owner, or landlord."
+  },
+  {
+   "type": "bullet",
+   "text": "Displaying relevant property listings based on your search criteria and location."
+  },
+  {
+   "type": "bullet",
+   "text": "Enabling direct contact between buyers, tenants, sellers, and landlords without intermediaries."
+  },
+  {
+   "type": "bullet",
+   "text": "Facilitating property listing creation, editing, and management by owners."
+  },
+  {
+   "type": "bullet",
+   "text": "Processing subscription or listing fee payments."
+  },
+  {
+   "type": "bullet",
+   "text": "Verifying identity and property ownership to ensure listing authenticity."
+  },
+  {
+   "type": "subtitle",
+   "text": "3.2 Personalisation and Recommendations"
+  },
+  {
+   "type": "bullet",
+   "text": "Recommending properties based on your search history, saved filters, and location."
+  },
+  {
+   "type": "bullet",
+   "text": "Sending alerts for new listings matching your requirements (if enabled)."
+  },
+  {
+   "type": "bullet",
+   "text": "Improving search algorithms and property-match accuracy over time."
+  },
+  {
+   "type": "subtitle",
+   "text": "3.3 Marketing and Communications"
+  },
+  {
+   "type": "bullet",
+   "text": "Sending promotional offers, new feature updates, and real estate insights via email, SMS, or push notifications (only with your consent)."
+  },
+  {
+   "type": "bullet",
+   "text": "You may opt out of all marketing communications at any time through the app settings or by emailing info@nakshatranamahacreations.com."
+  },
+  {
+   "type": "subtitle",
+   "text": "3.4 Safety, Compliance, and Legal"
+  },
+  {
+   "type": "bullet",
+   "text": "Verifying property listings to prevent fraudulent or misrepresented listings."
+  },
+  {
+   "type": "bullet",
+   "text": "Complying with applicable Indian laws including the Real Estate (Regulation and Development) Act, 2016 (RERA), Information Technology Act, 2000, and the Consumer Protection Act, 2019."
+  },
+  {
+   "type": "bullet",
+   "text": "Responding to legal requests, court orders, or regulatory authority inquiries."
+  },
+  {
+   "type": "bullet",
+   "text": "Enforcing our Terms and Conditions and protecting Platform integrity."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "04 | Sharing Your Information"
+  },
+  {
+   "type": "highlight",
+   "text": "Thirty Forty does not sell, rent, or trade your personal data to third parties for commercial purposes. Your information is shared only in the circumstances described below."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.1 Between Property Seekers and Owners"
+  },
+  {
+   "type": "paragraph",
+   "text": "When a seeker initiates contact with an owner or landlord, limited profile information (name, verified status, mobile number if opted in) is shared to enable direct communication. Property address details are disclosed in full only upon confirmed contact or visit scheduling."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.2 Service Providers"
+  },
+  {
+   "type": "paragraph",
+   "text": "We share data with trusted third-party service providers who support Platform operations, including:"
+  },
+  {
+   "type": "bullet",
+   "text": "Cloud hosting and infrastructure providers (AWS, Google Cloud, or similar)."
+  },
+  {
+   "type": "bullet",
+   "text": "Payment gateways for processing subscription and listing fee payments."
+  },
+  {
+   "type": "bullet",
+   "text": "Analytics and crash-reporting tools to monitor app performance."
+  },
+  {
+   "type": "bullet",
+   "text": "SMS and email communication services for OTPs and notifications."
+  },
+  {
+   "type": "bullet",
+   "text": "KYC and identity verification providers as required by law."
+  },
+  {
+   "type": "paragraph",
+   "text": "All service providers are bound by confidentiality agreements and may not use your data for any purpose other than the service they provide to us."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.3 Home Loan and Financial Partners"
+  },
+  {
+   "type": "paragraph",
+   "text": "If you opt in to home loan assistance or financial advisory services offered through the Platform, your relevant information will be shared with our partner financial institutions. This sharing is entirely voluntary and requires your explicit consent at the time of opting in."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.4 Legal and Regulatory Disclosure"
+  },
+  {
+   "type": "paragraph",
+   "text": "We may disclose your information to law enforcement agencies, courts, or regulatory authorities if required by law, legal process, or to protect the safety, rights, or property of Thirty Forty, our users, or the public."
+  },
+  {
+   "type": "subtitle",
+   "text": "4.5 Business Transfers"
+  },
+  {
+   "type": "paragraph",
+   "text": "In the event of a merger, acquisition, or sale of assets, user information may be transferred as part of that transaction. You will be notified in advance via the email address associated with your account."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "05 | Data Storage and Retention"
+  },
+  {
+   "type": "paragraph",
+   "text": "All data is stored on secure servers located in India or as required by applicable law. We retain your personal information for the following periods:"
+  },
+  {
+   "type": "table",
+   "headers": [
+    "Data type",
+    "Retention period"
+   ],
+   "rows": [
+    [
+     "Account profile data",
+     "Duration of account + 3 years post-deletion"
+    ],
+    [
+     "Property listing data",
+     "Duration of listing + 2 years after expiry"
+    ],
+    [
+     "Transaction and payment records",
+     "7 years (as per Indian tax and accounting law)"
+    ],
+    [
+     "KYC and identity documents",
+     "As required by applicable KYC regulations"
+    ],
+    [
+     "Chat and communication logs",
+     "2 years from last interaction"
+    ],
+    [
+     "Marketing preferences",
+     "Until consent is withdrawn"
+    ]
+   ]
+  },
+  {
+   "type": "paragraph",
+   "text": "After the applicable retention period, your data is either deleted or anonymised so it can no longer identify you."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "06 | Your Rights and Choices"
+  },
+  {
+   "type": "bullet",
+   "text": "Access: Request a copy of the personal information we hold about you."
+  },
+  {
+   "type": "bullet",
+   "text": "Correction: Request correction of inaccurate, incomplete, or outdated data."
+  },
+  {
+   "type": "bullet",
+   "text": "Deletion: Request deletion of your account and associated personal data (subject to legal retention requirements)."
+  },
+  {
+   "type": "bullet",
+   "text": "Data Portability: Receive your data in a structured, commonly used, machine-readable format."
+  },
+  {
+   "type": "bullet",
+   "text": "Withdraw Consent: Withdraw consent for marketing communications or data sharing with financial partners at any time."
+  },
+  {
+   "type": "bullet",
+   "text": "Opt Out of Location Tracking: Disable location permissions through your device settings at any time."
+  },
+  {
+   "type": "bullet",
+   "text": "Restrict Processing: Request restriction of processing of your data in certain circumstances."
+  },
+  {
+   "type": "highlight",
+   "text": "To exercise any of these rights, contact us at info@nakshatranamahacreations.com or +91 99005 66466. We will acknowledge your request within 72 hours and resolve it within 30 days."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "07 | Data Security"
+  },
+  {
+   "type": "bullet",
+   "text": "All data transmitted between your device and our servers is encrypted using SSL/TLS protocols."
+  },
+  {
+   "type": "bullet",
+   "text": "Sensitive information such as passwords, OTPs, and payment data is encrypted at rest."
+  },
+  {
+   "type": "bullet",
+   "text": "Access to personal data is restricted to authorised personnel on a need-to-know basis."
+  },
+  {
+   "type": "bullet",
+   "text": "Regular third-party security audits and penetration testing are conducted."
+  },
+  {
+   "type": "bullet",
+   "text": "We maintain an incident response plan to address any data breaches promptly and notify affected users as required by law."
+  },
+  {
+   "type": "highlight",
+   "text": "No digital system can guarantee 100% security. We strongly advise users to keep their login credentials confidential, use strong and unique passwords, and report any suspicious activity to info@nakshatranamahacreations.com immediately."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "08 | Cookies and Tracking Technologies"
+  },
+  {
+   "type": "paragraph",
+   "text": "Our web Platform uses cookies and similar technologies. These include:"
+  },
+  {
+   "type": "bullet",
+   "text": "Essential Cookies: Required for login sessions, property search filters, and core functionality."
+  },
+  {
+   "type": "bullet",
+   "text": "Analytics Cookies: Help us understand how users navigate the Platform to improve the experience."
+  },
+  {
+   "type": "bullet",
+   "text": "Preference Cookies: Remember your search preferences such as location, property type, and budget range."
+  },
+  {
+   "type": "bullet",
+   "text": "Marketing Cookies: Used to show relevant property ads on external platforms (only with your consent)."
+  },
+  {
+   "type": "paragraph",
+   "text": "You can manage or disable cookies through your browser settings. Disabling essential cookies may affect the functionality of the Platform."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "09 | Children’s Privacy"
+  },
+  {
+   "type": "paragraph",
+   "text": "The Thirty Forty Platform is intended for use by individuals aged 18 years and above. We do not knowingly collect personal information from persons under the age of 18. If we become aware that a minor has provided personal information without parental consent, we will delete such data immediately. If you believe a minor has registered on our Platform, please notify us at info@nakshatranamahacreations.com."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "10 | Third-Party Websites and Services"
+  },
+  {
+   "type": "paragraph",
+   "text": "The Platform may contain links to third-party websites, property developer portals, or financial institution websites. This Privacy Policy does not apply to those third-party sites. We encourage you to review the privacy policies of any external sites you visit through links on our Platform. Thirty Forty is not responsible for the privacy practices or content of third-party websites."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "11 | Changes to This Privacy Policy"
+  },
+  {
+   "type": "paragraph",
+   "text": "We may update this Privacy Policy periodically to reflect changes in our data practices, legal requirements, or Platform features. We will notify you of any material changes by:"
+  },
+  {
+   "type": "bullet",
+   "text": "Posting the updated policy on the Platform with a revised Effective Date."
+  },
+  {
+   "type": "bullet",
+   "text": "Sending a notification to your registered email address."
+  },
+  {
+   "type": "bullet",
+   "text": "Displaying an in-app prompt directing you to review the updated policy."
+  },
+  {
+   "type": "paragraph",
+   "text": "Your continued use of the Platform after the effective date of any changes constitutes your acceptance of the updated Privacy Policy."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "12 | Grievance Officer"
+  },
+  {
+   "type": "paragraph",
+   "text": "In accordance with the Information Technology Act, 2000 and the IT (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, the name and contact details of our Grievance Officer are provided below:"
+  },
+  {
+   "type": "highlight",
+   "text": "Grievance Officer: Harish Kashyap\\nNakshatra Namaha Creations Pvt. Ltd.\\nEmail: info@nakshatranamahacreations.com\\nPhone: +91 99005 66466\\nAddress: #392, Darshan Plaza, 1st Floor, Dwarakanagar, Channasandra, Bangalore 560098\\nResponse Time: Within 24 hours of receipt; resolution within 30 days."
+  }
+ ]
+}

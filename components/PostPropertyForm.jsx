@@ -3,116 +3,242 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Icon, { WhatsAppIcon } from "./Icon";
 import Reveal from "./Reveal";
-import { TYPES } from "@/lib/data";
+import {
+  BHK_OPTIONS,
+  BATHROOMS,
+  FURNISHING,
+  POSSESSION,
+  SALE_TYPES,
+  FACINGS,
+  AMENITIES,
+  APPROVAL_AUTHORITIES,
+  DIET,
+  OCCUPANCY,
+  FOOD,
+  PG_AMENITIES,
+  PROFESSION,
+  NEARBY_CATEGORIES,
+} from "@/lib/options";
 import { SITE, whatsappLink } from "@/lib/site";
 
-const STEPS = ["Basics", "Details", "Contact"];
-const FACING = ["East", "West", "North", "South", "North-East", "North-West", "South-East", "South-West"];
-const FURNISHING = ["Unfurnished", "Semi-Furnished", "Furnished"];
+// Same three steps as the app's "Add Property": property type → details → images.
+// Publishing needs the app (it uploads photos and verifies your number), so
+// from the website the finished listing goes to the Thirty Forty team on WhatsApp.
+const STEPS = ["Property", "Details", "Publish"];
+const RES_TYPES = ["Flat", "House", "Villa", "Plot"];
+const COM_TYPES = ["Office Space", "Shop", "Showroom", "Commercial"];
 
 const EMPTY = {
-  listing: "Sell",
-  type: "flat",
-  title: "",
-  locality: "",
-  price: "",
-  area: "",
-  dimensions: "",
-  beds: "",
-  baths: "",
+  want: "",
+  lease: "Rent",
+  property: "",
+  sub: "",
+  occupancy: [],
+  food: "",
+  pgAmenities: [],
+  profession: [],
+  saleType: "",
   facing: "",
+  unit: "Feet",
+  len: "",
+  wid: "",
+  acre: "",
+  kunte: "",
+  city: "",
+  address: "",
+  landmark: "",
+  bedrooms: "",
+  bathrooms: "",
   furnishing: "",
+  floor: "",
+  possession: "",
+  diet: "",
+  bachelor: "",
+  approval: "Others",
+  rera: "No",
+  reraNo: "",
+  amenities: [],
+  seats: "",
+  price: "",
+  token: "",
+  nearby: [],
   name: "",
   phone: "",
-  notes: "",
 };
 
-// There's no web backend yet, so the finished listing is sent to the
-// 30Forty team on WhatsApp. Photos are added in the app.
+const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
+
+// Price in words, like the app's helper under "Price you expect"
+function inWords(n) {
+  n = Math.floor(Number(n) || 0);
+  if (!n) return "Zero Rupees";
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  const two = (x) => (x < 20 ? a[x] : `${b[Math.floor(x / 10)]}${x % 10 ? ` ${a[x % 10]}` : ""}`);
+  const three = (x) => (x >= 100 ? `${a[Math.floor(x / 100)]} Hundred${x % 100 ? ` ${two(x % 100)}` : ""}` : two(x));
+  const parts = [];
+  const cr = Math.floor(n / 1e7);
+  const lakh = Math.floor((n % 1e7) / 1e5);
+  const th = Math.floor((n % 1e5) / 1e3);
+  const rest = n % 1e3;
+  if (cr) parts.push(`${three(cr)} Crore`);
+  if (lakh) parts.push(`${two(lakh)} Lakh`);
+  if (th) parts.push(`${two(th)} Thousand`);
+  if (rest) parts.push(three(rest));
+  return `${parts.join(" ")} Rupees`;
+}
+
+function Choice({ label, options, value, onChange, multi = false, required = false }) {
+  return (
+    <div className="pf-group">
+      <p className="pf-label">
+        {label}
+        {required && <em>*</em>}
+      </p>
+      <div className="chips">
+        {options.map((o) => {
+          const id = o.id ?? o;
+          const text = o.label ?? o;
+          const on = multi ? value.includes(text) : value === text;
+          return (
+            <motion.button key={id} type="button" whileTap={{ scale: 0.94 }} className={`chip ${on ? "on" : ""}`} aria-pressed={on} onClick={() => onChange(multi ? toggleIn(value, text) : on ? "" : text)}>
+              {text}
+            </motion.button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Sections slide in one after another as each answer is given, like the app
+const Appear = ({ show, children }) => (
+  <AnimatePresence initial={false}>
+    {show && (
+      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} style={{ overflow: "hidden" }}>
+        {children}
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
 export default function PostPropertyForm() {
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState(EMPTY);
+  const [f, setF] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+  const [place, setPlace] = useState({ category: NEARBY_CATEGORIES[0], name: "", distance: "" });
+  const set = (patch) => setF((s) => ({ ...s, ...patch }));
+  const input = (k) => ({ value: f[k], onChange: (e) => set({ [k]: e.target.value }) });
 
-  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target ? e.target.value : e }));
+  const isPg = f.want === "PG";
+  const isAgri = f.property === "Agricultural Land";
+  const isRes = f.property === "Residential";
+  const isCom = f.property === "Commercial";
+  const isPlot = f.sub === "Plot";
+  const homeLike = isRes && !isPlot;
+  const mult = f.unit === "Meters" ? 10.7639 : 1;
+  const total = f.len && f.wid ? Math.round(Number(f.len) * Number(f.wid) * mult * 100) / 100 : 0;
+  const agriTotal = Math.round((Number(f.acre) || 0) * 43560 + (Number(f.kunte) || 0) * 1089);
+  const typeDone = isPg ? f.occupancy.length > 0 : isAgri || ((isRes || isCom) && f.sub);
 
   const validate = (s) => {
     const e = {};
     if (s === 0) {
-      if (!form.title.trim()) e.title = "Give your listing a title";
-      if (!form.locality.trim()) e.locality = "Enter the locality";
+      if (!f.want) e.want = "Choose Sell, Rent/Lease or PG";
+      else if (!f.property) e.property = "Choose the property";
+      else if (!typeDone) e.sub = isPg ? "Choose the occupancy type" : "Choose the type";
+      if (!f.city.trim()) e.city = "Enter City";
+      if (!f.address.trim()) e.address = "Enter Full Address";
     }
     if (s === 1) {
-      if (!(Number(form.price) > 0)) e.price = "Enter a price in rupees";
-      if (!(Number(form.area) > 0)) e.area = "Enter the area";
+      if (!(Number(f.price) > 0)) e.price = "Enter the price you expect";
+      if (homeLike && !f.bedrooms) e.bedrooms = "Choose bedrooms";
+      if (f.rera === "Yes" && !f.reraNo.trim()) e.reraNo = "Enter RERA Number";
     }
     if (s === 2) {
-      if (!form.name.trim()) e.name = "Enter your name";
-      if (!/^[6-9]\d{9}$/.test(form.phone.replace(/\D/g, "").slice(-10))) e.phone = "Enter a valid 10-digit mobile number";
+      if (!f.name.trim()) e.name = "Enter your name";
+      if (!/^[6-9]\d{9}$/.test(f.phone.replace(/\D/g, "").slice(-10))) e.phone = "Enter a valid 10-digit mobile number";
     }
     setErrors(e);
     return !Object.keys(e).length;
   };
 
-  const next = () => validate(step) && setStep((s) => s + 1);
+  const next = () => {
+    if (!validate(step)) return;
+    setStep((s) => s + 1);
+    window.__lenis?.scrollTo(".post-card", { offset: -110 });
+  };
+
+  const addPlace = () => {
+    if (!place.name.trim()) return;
+    set({ nearby: [...f.nearby, { ...place, name: place.name.trim() }] });
+    setPlace({ category: NEARBY_CATEGORIES[0], name: "", distance: "" });
+  };
 
   const submit = (e) => {
     e.preventDefault();
     if (!validate(2)) return;
-    const type = TYPES.find((t) => t.id === form.type)?.label;
+    const want = f.want === "Rent/Lease" ? f.lease : f.want;
     const lines = [
-      "New property listing from the 30Forty website",
+      "New property from the Thirty Forty website",
       "",
-      `Listing for: ${form.listing}`,
-      `Type: ${type}`,
-      `Title: ${form.title}`,
-      `Locality: ${form.locality}`,
-      `Price: ₹${Number(form.price).toLocaleString("en-IN")}${form.listing === "Sell" ? "" : "/month"}`,
-      `Area: ${form.area} sqft`,
-      form.dimensions ? `Dimensions: ${form.dimensions}` : null,
-      form.beds ? `Bedrooms: ${form.beds}` : null,
-      form.baths ? `Bathrooms: ${form.baths}` : null,
-      form.facing ? `Facing: ${form.facing}` : null,
-      form.furnishing ? `Furnishing: ${form.furnishing}` : null,
-      form.notes ? `Notes: ${form.notes}` : null,
+      `I want to: ${want}`,
+      `Property: ${f.property}${f.sub ? ` — ${f.sub}` : ""}`,
+      isPg && `Occupancy: ${f.occupancy.join(", ")}`,
+      isPg && f.food && `Food Provided: ${f.food}`,
+      isPg && f.pgAmenities.length && `Amenities: ${f.pgAmenities.join(", ")}`,
+      isPg && f.profession.length && `Profession: ${f.profession.join(", ")}`,
+      f.saleType && `Sale Type: ${f.saleType}`,
+      f.facing && `Facing: ${f.facing}`,
+      isAgri ? (f.acre || f.kunte) && `Covered Area: ${f.acre || 0} Acre ${f.kunte || 0} Kunte (${agriTotal} sqft)` : total && `Dimensions: ${f.len} x ${f.wid} ${f.unit === "Meters" ? "m" : "ft"} (${total} sqft)`,
+      `City: ${f.city}`,
+      `Address: ${f.address}`,
+      f.landmark && `Landmark: ${f.landmark}`,
+      f.bedrooms && `Bedrooms: ${f.bedrooms}`,
+      f.bathrooms && `Bathrooms: ${f.bathrooms}`,
+      f.furnishing && `Furnishing: ${f.furnishing}`,
+      f.floor && `Floor No.: ${f.floor}`,
+      f.possession && `Possession Status: ${f.possession}`,
+      f.diet && `Diet: ${f.diet}`,
+      f.bachelor && `Bachelor Allowed: ${f.bachelor}`,
+      f.seats && `No. of sites: ${f.seats}`,
+      (homeLike || isPlot) && `Approval Authority: ${f.approval}`,
+      homeLike && `RERA registered: ${f.rera}${f.rera === "Yes" ? ` (${f.reraNo})` : ""}`,
+      f.amenities.length && `Amenities: ${f.amenities.join(", ")}`,
+      `Price you expect: ₹${Number(f.price).toLocaleString("en-IN")}`,
+      f.token && `Booking/Token Amount: ₹${Number(f.token).toLocaleString("en-IN")}`,
+      f.nearby.length && `Nearby places: ${f.nearby.map((n) => `${n.name} (${n.category}${n.distance ? `, ${n.distance} km` : ""})`).join("; ")}`,
       "",
-      `Owner: ${form.name}, ${form.phone}`,
-    ].filter((l) => l !== null);
+      `Posted by: ${f.name}, +91 ${f.phone.replace(/\D/g, "").slice(-10)}`,
+      "I'll share photos in this chat.",
+    ].filter(Boolean);
     window.open(whatsappLink(lines.join("\n")), "_blank", "noopener");
     setSent(true);
   };
-
-  const field = (k, label, props = {}) => (
-    <label className={`field ${errors[k] ? "has-error" : ""}`}>
-      <span>{label}</span>
-      <input value={form[k]} onChange={set(k)} {...props} />
-      {errors[k] && <small>{errors[k]}</small>}
-    </label>
-  );
 
   return (
     <section className="section post">
       <div className="container post-grid">
         <Reveal className="post-card">
           {sent ? (
-            <motion.div className="post-done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-              <span className="done-icon">
-                <Icon name="check" size={40} strokeWidth={2.6} />
-              </span>
+            <motion.div className="post-done" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+              <motion.span className="post-done-icon" initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.1 }}>
+                <Icon name="check" size={44} strokeWidth={3} />
+              </motion.span>
               <h2>Almost done!</h2>
               <p>
-                Send the WhatsApp message that just opened and our team will publish your listing. Add photos anytime from
-                the 30Forty app.
+                Send the WhatsApp message that just opened and attach a few photos. The Thirty Forty team will publish your listing
+                and you'll get enquiries straight to your phone.
               </p>
               <div className="post-done-actions">
-                <a className="btn btn-green" href={SITE.playStore} target="_blank" rel="noopener noreferrer">
-                  <Icon name="playFilled" size={18} /> Get the app
+                <a className="btn btn-yellow" href={SITE.playStore} target="_blank" rel="noopener noreferrer">
+                  <Icon name="playFilled" size={18} /> Manage it in the app
                 </a>
                 <button
                   className="btn btn-outline"
                   onClick={() => {
-                    setForm(EMPTY);
+                    setF(EMPTY);
                     setStep(0);
                     setSent(false);
                   }}
@@ -123,84 +249,249 @@ export default function PostPropertyForm() {
             </motion.div>
           ) : (
             <form onSubmit={submit} noValidate>
-              <ol className="stepper">
+              <ol className="steps-bar">
                 {STEPS.map((s, i) => (
                   <li key={s} className={i === step ? "on" : i < step ? "done" : ""}>
                     <span>{i < step ? <Icon name="check" size={14} strokeWidth={3} /> : i + 1}</span>
                     {s}
                   </li>
                 ))}
+                <motion.i className="steps-fill" animate={{ scaleX: step / (STEPS.length - 1) }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} />
               </ol>
 
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={step}
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -40 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  className="post-step"
-                >
+                <motion.div key={step} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
                   {step === 0 && (
                     <>
-                      <h3 className="filter-title">I want to</h3>
-                      <div className="seg seg-3">
-                        {["Sell", "Rent", "PG"].map((m) => (
-                          <button type="button" key={m} className={form.listing === m ? "on" : ""} onClick={() => set("listing")(m)}>
-                            {form.listing === m && <motion.span layoutId="post-seg" className="seg-pill" />}
-                            <span>{m.toUpperCase()}</span>
-                          </button>
-                        ))}
+                      <h2 className="pf-title">Add Property</h2>
+                      <Choice label="I want to" required options={["Sell", "Rent/Lease", "PG"]} value={f.want} onChange={(want) => set({ want, property: "", sub: "", occupancy: [] })} />
+                      {errors.want && <p className="form-error">{errors.want}</p>}
+                      <Appear show={f.want === "Rent/Lease"}>
+                        <Choice label="Type" options={["Rent", "Lease"]} value={f.lease} onChange={(lease) => set({ lease: lease || "Rent" })} />
+                      </Appear>
+                      <Appear show={!!f.want}>
+                        <Choice
+                          label="Property"
+                          required
+                          options={isPg ? ["Boys PG", "Girls PG", "Co-Living PG"] : ["Residential", "Commercial", "Agricultural Land"]}
+                          value={f.property}
+                          onChange={(property) => set({ property, sub: "" })}
+                        />
+                        {errors.property && <p className="form-error">{errors.property}</p>}
+                      </Appear>
+                      <Appear show={isRes}>
+                        <Choice label="Residential Type" required options={RES_TYPES} value={f.sub} onChange={(sub) => set({ sub })} />
+                      </Appear>
+                      <Appear show={isCom}>
+                        <Choice label="Commercial Type" required options={COM_TYPES} value={f.sub} onChange={(sub) => set({ sub })} />
+                      </Appear>
+                      <Appear show={isPg && !!f.property}>
+                        <Choice label="Occupancy Type" required multi options={OCCUPANCY} value={f.occupancy} onChange={(occupancy) => set({ occupancy })} />
+                        <Choice label="Food Provided" options={FOOD} value={f.food} onChange={(food) => set({ food })} />
+                        <Choice label="Amenities" multi options={PG_AMENITIES} value={f.pgAmenities} onChange={(pgAmenities) => set({ pgAmenities })} />
+                        <Choice label="Profession Type" multi options={PROFESSION} value={f.profession} onChange={(profession) => set({ profession })} />
+                      </Appear>
+                      {errors.sub && <p className="form-error">{errors.sub}</p>}
+
+                      <Appear show={!!typeDone}>
+                        {!isPg && <Choice label="Sale Type" options={SALE_TYPES} value={f.saleType} onChange={(saleType) => set({ saleType })} />}
+                        <Choice label="Facing" options={FACINGS} value={f.facing} onChange={(facing) => set({ facing })} />
+
+                        {isAgri ? (
+                          <div className="pf-group">
+                            <p className="pf-label">Covered Area</p>
+                            <div className="pf-row">
+                              <label className="field">
+                                <span>Acre</span>
+                                <input inputMode="decimal" {...input("acre")} placeholder="e.g. 2" />
+                              </label>
+                              <label className="field">
+                                <span>Kunte / Gunta</span>
+                                <input inputMode="decimal" {...input("kunte")} placeholder="e.g. 10" />
+                              </label>
+                            </div>
+                            {agriTotal > 0 && (
+                              <p className="pf-total">
+                                Total Area (in sqft): <b>{agriTotal.toLocaleString("en-IN")}</b>
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="pf-group">
+                            <p className="pf-label">Property Area</p>
+                            <div className="mini-seg">
+                              {["Feet", "Meters"].map((u) => (
+                                <button key={u} type="button" className={f.unit === u ? "on" : ""} onClick={() => set({ unit: u })}>
+                                  {u}
+                                </button>
+                              ))}
+                            </div>
+                            <div className="pf-row pf-dims">
+                              <label className="field">
+                                <span>Length</span>
+                                <input inputMode="decimal" {...input("len")} placeholder={f.unit === "Feet" ? "ft (eg. 30)" : "m (eg. 9)"} />
+                              </label>
+                              <span className="pf-x">×</span>
+                              <label className="field">
+                                <span>Breadth</span>
+                                <input inputMode="decimal" {...input("wid")} placeholder={f.unit === "Feet" ? "ft (eg. 40)" : "m (eg. 12)"} />
+                              </label>
+                            </div>
+                            <AnimatePresence>
+                              {total > 0 && (
+                                <motion.p className="pf-total" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                                  Total Area (in sqft): <b>{total.toLocaleString("en-IN")}</b>
+                                </motion.p>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </Appear>
+
+                      <div className="pf-group">
+                        <p className="pf-label">Property Location</p>
+                        <label className="field">
+                          <span>Enter City*</span>
+                          <input {...input("city")} placeholder="e.g. Mysore" autoComplete="address-level2" />
+                          {errors.city && <em className="field-err">{errors.city}</em>}
+                        </label>
+                        <label className="field">
+                          <span>Enter Full Address*</span>
+                          <textarea rows={2} {...input("address")} placeholder="Door no., street, area" />
+                          {errors.address && <em className="field-err">{errors.address}</em>}
+                        </label>
+                        <label className="field">
+                          <span>Landmark</span>
+                          <input {...input("landmark")} placeholder="e.g. Near TVS factory" />
+                        </label>
                       </div>
-                      <h3 className="filter-title">Property Type</h3>
-                      <div className="chips">
-                        {TYPES.map((t) => (
-                          <button type="button" key={t.id} className={`chip ${form.type === t.id ? "on" : ""}`} onClick={() => set("type")(t.id)}>
-                            {t.label}
-                          </button>
-                        ))}
-                      </div>
-                      {field("title", "Listing title", { placeholder: "e.g. 3BHK flat near Ring Road" })}
-                      {field("locality", "Locality", { placeholder: "e.g. Vijayanagar, Mysuru" })}
                     </>
                   )}
 
                   {step === 1 && (
-                    <div className="field-grid">
-                      {field("price", form.listing === "Sell" ? "Expected price (₹)" : "Monthly rent (₹)", { inputMode: "numeric", placeholder: "e.g. 4500000" })}
-                      {field("area", "Area (sqft)", { inputMode: "numeric", placeholder: "e.g. 1200" })}
-                      {field("dimensions", "Dimensions", { placeholder: "e.g. 30 x 40" })}
-                      {field("beds", "Bedrooms", { inputMode: "numeric", placeholder: "e.g. 3" })}
-                      {field("baths", "Bathrooms", { inputMode: "numeric", placeholder: "e.g. 2" })}
-                      <label className="field">
-                        <span>Facing</span>
-                        <select value={form.facing} onChange={set("facing")}>
-                          <option value="">Select</option>
-                          {FACING.map((f) => (
-                            <option key={f}>{f}</option>
-                          ))}
-                        </select>
-                      </label>
-                      <label className="field span-2">
-                        <span>Furnishing</span>
-                        <select value={form.furnishing} onChange={set("furnishing")}>
-                          <option value="">Select</option>
-                          {FURNISHING.map((f) => (
-                            <option key={f}>{f}</option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
+                    <>
+                      <h2 className="pf-title">{isPg ? f.property : f.sub || f.property} details</h2>
+                      {homeLike && (
+                        <>
+                          <Choice label="Bedrooms" required options={BHK_OPTIONS.map((b) => b.label)} value={f.bedrooms} onChange={(bedrooms) => set({ bedrooms })} />
+                          {errors.bedrooms && <p className="form-error">{errors.bedrooms}</p>}
+                          {f.sub === "Flat" && <Choice label="Bathrooms" options={BATHROOMS.map(String)} value={f.bathrooms} onChange={(bathrooms) => set({ bathrooms })} />}
+                        </>
+                      )}
+                      {isCom && f.sub === "Office Space" && (
+                        <label className="field">
+                          <span>No. of sites</span>
+                          <input inputMode="numeric" {...input("seats")} />
+                        </label>
+                      )}
+                      {(homeLike || isCom) && <Choice label="Furnishing" options={FURNISHING} value={f.furnishing} onChange={(furnishing) => set({ furnishing })} />}
+                      {(homeLike || isCom) && (
+                        <label className="field">
+                          <span>Floor No.</span>
+                          <input {...input("floor")} placeholder="Enter Floor Details" />
+                        </label>
+                      )}
+                      {homeLike && <Choice label="Possession Status" options={POSSESSION} value={f.possession} onChange={(possession) => set({ possession })} />}
+                      {homeLike && f.want === "Rent/Lease" && (
+                        <>
+                          <Choice label="Diet" options={DIET} value={f.diet} onChange={(diet) => set({ diet })} />
+                          <Choice label="Bachelor Allowed" options={["Yes", "No"]} value={f.bachelor} onChange={(bachelor) => set({ bachelor })} />
+                        </>
+                      )}
+                      {(homeLike || isPlot) && (
+                        <Choice label="Approval Authority" options={[...APPROVAL_AUTHORITIES, "Others"]} value={f.approval} onChange={(approval) => set({ approval: approval || "Others" })} />
+                      )}
+                      {homeLike && (
+                        <>
+                          <Choice label="Is your property RERA registered?" options={["Yes", "No"]} value={f.rera} onChange={(rera) => set({ rera: rera || "No" })} />
+                          <Appear show={f.rera === "Yes"}>
+                            <label className="field">
+                              <span>Enter RERA Number</span>
+                              <input {...input("reraNo")} />
+                              {errors.reraNo && <em className="field-err">{errors.reraNo}</em>}
+                            </label>
+                          </Appear>
+                        </>
+                      )}
+                      {(homeLike || isCom) && <Choice label="Amenities" multi options={AMENITIES} value={f.amenities} onChange={(amenities) => set({ amenities })} />}
+
+                      <div className="pf-group">
+                        <label className="field">
+                          <span>Price you expect*</span>
+                          <div className="field-prefix">
+                            <em>₹</em>
+                            <input inputMode="numeric" value={f.price} onChange={(e) => set({ price: e.target.value.replace(/\D/g, "") })} />
+                          </div>
+                          <small className="pf-words">{inWords(f.price)}</small>
+                          {errors.price && <em className="field-err">{errors.price}</em>}
+                        </label>
+                        <label className="field">
+                          <span>Booking/Token Amount</span>
+                          <div className="field-prefix">
+                            <em>₹</em>
+                            <input inputMode="numeric" value={f.token} onChange={(e) => set({ token: e.target.value.replace(/\D/g, "") })} placeholder="500" />
+                          </div>
+                        </label>
+                      </div>
+
+                      <div className="pf-group">
+                        <p className="pf-label">Nearby places (optional)</p>
+                        {f.nearby.length > 0 && (
+                          <ul className="pf-near">
+                            {f.nearby.map((n, i) => (
+                              <motion.li key={n.name + i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
+                                <Icon name="compass" size={16} />
+                                <span>
+                                  <b>{n.name}</b> {n.category}
+                                  {n.distance && ` • ${n.distance} KM`}
+                                </span>
+                                <button type="button" aria-label={`Remove ${n.name}`} onClick={() => set({ nearby: f.nearby.filter((_, j) => j !== i) })}>
+                                  <Icon name="close" size={14} />
+                                </button>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        )}
+                        <div className="pf-near-add">
+                          <select value={place.category} onChange={(e) => setPlace((p) => ({ ...p, category: e.target.value }))} aria-label="Category">
+                            {NEARBY_CATEGORIES.map((c) => (
+                              <option key={c}>{c}</option>
+                            ))}
+                          </select>
+                          <input value={place.name} onChange={(e) => setPlace((p) => ({ ...p, name: e.target.value }))} placeholder="Place Name (e.g., Green Line Metro)" aria-label="Place name" />
+                          <input value={place.distance} onChange={(e) => setPlace((p) => ({ ...p, distance: e.target.value }))} inputMode="decimal" placeholder="Distance in km (e.g., 1.2)" aria-label="Distance in km" />
+                          <button type="button" className="btn btn-outline" onClick={addPlace}>
+                            <Icon name="plus" size={16} /> Add Place
+                          </button>
+                        </div>
+                      </div>
+                    </>
                   )}
 
                   {step === 2 && (
                     <>
-                      {field("name", "Your name", { autoComplete: "name" })}
-                      {field("phone", "Mobile number", { inputMode: "tel", autoComplete: "tel", placeholder: "10-digit mobile number" })}
+                      <h2 className="pf-title">Publish</h2>
+                      <div className="pf-photos">
+                        <Icon name="image" size={30} />
+                        <div>
+                          <b>Photos</b>
+                          <p>Photos are optional. After you tap Send, attach them in the WhatsApp chat — or post from the app to upload them yourself.</p>
+                        </div>
+                      </div>
                       <label className="field">
-                        <span>Anything else? (optional)</span>
-                        <textarea rows={3} value={form.notes} onChange={set("notes")} placeholder="Amenities, landmark, best time to call…" />
+                        <span>Your name</span>
+                        <input {...input("name")} autoComplete="name" />
+                        {errors.name && <em className="field-err">{errors.name}</em>}
                       </label>
+                      <label className="field">
+                        <span>Phone Number</span>
+                        <div className="field-prefix">
+                          <em>+91</em>
+                          <input {...input("phone")} inputMode="tel" autoComplete="tel-national" placeholder="Enter your number" />
+                        </div>
+                        {errors.phone && <em className="field-err">{errors.phone}</em>}
+                      </label>
+                      <p className="muted pf-terms">By continuing you agree to our Terms &amp; Privacy Policy.</p>
                     </>
                   )}
                 </motion.div>
@@ -214,11 +505,11 @@ export default function PostPropertyForm() {
                 )}
                 {step < 2 ? (
                   <button type="button" className="btn btn-green" onClick={next}>
-                    Continue <Icon name="arrow" size={18} />
+                    Next <Icon name="arrow" size={18} />
                   </button>
                 ) : (
                   <button type="submit" className="btn btn-enquire">
-                    <WhatsAppIcon /> Send listing
+                    <WhatsAppIcon /> Send to Thirty Forty
                   </button>
                 )}
               </div>
@@ -227,15 +518,23 @@ export default function PostPropertyForm() {
         </Reveal>
 
         <aside className="post-aside">
-          <Reveal delay={0.1}>
-            <h3>Why owners choose 30Forty</h3>
+          <Reveal delay={0.1} className="post-app">
+            <img src="/brand/logo-light.png" alt="" />
+            <h3>Fastest way: post in the app</h3>
+            <p>Upload photos, pick the location on a map, edit anytime and see every enquiry in your Dashboard.</p>
+            <a className="btn btn-yellow btn-block" href={SITE.playStore} target="_blank" rel="noopener noreferrer">
+              <Icon name="playFilled" size={18} /> Get it on Google Play
+            </a>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <h3>Why post on Thirty Forty</h3>
             <ul>
               {[
-                ["sparkle", "Free, unlimited listings"],
-                ["shield", "Zero brokerage — keep 100%"],
-                ["bell", "Instant alert for every enquiry"],
-                ["chat", "Buyers reach you on WhatsApp"],
-                ["camera", "Add photos from the app"],
+                ["sparkle", "Posting is free"],
+                ["bell", "Instant notification for every enquiry"],
+                ["chat", "Buyers and tenants reach you on WhatsApp"],
+                ["dashboard", "Manage listings from your Dashboard"],
+                ["crown", "Go Premium for top placement"],
               ].map(([icon, t]) => (
                 <li key={t}>
                   <span className="why-icon sm">

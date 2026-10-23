@@ -10,27 +10,27 @@ import Icon from "../Icon";
 const STEPS = [
   {
     screen: "/screens/splash.jpg",
-    title: "Open 30Forty",
-    text: "Download the app and sign in with your phone number. No forms, no fees, no agent calling you back.",
-    points: ["Free on Google Play", "Login with mobile number", "No sign-up fee"],
+    title: "Open Thirty Forty",
+    text: "Download the app and log in with your phone number — we send a one-time password (OTP) to verify it. New here? Just add your name.",
+    points: ["Free on Google Play", "Login with OTP", "No sign-up forms"],
   },
   {
-    screen: "/screens/home.jpg",
+    screen: "/screens/app-home.jpg",
     title: "Search your locality",
-    text: "Type a locality or tap Near me to see owners' listings around you. Jump straight to Buy, Rent, Commercial or Farm land.",
-    points: ["Search by locality", "Near me", "Buy · Rent · Commercial · Farm"],
+    text: "Type a locality or tap Near me to see properties around you. Jump straight to Buy, Rent, Commercial or Agricultural Land.",
+    points: ["Search by Locality", "Near me", "Buy · Rent · Commercial · Farm"],
   },
   {
     screen: "/screens/search.jpg",
     title: "Filter what fits",
-    text: "Pick Buy, Rent or PG, choose the property type and set a budget anywhere from 1 K to 10 Cr+.",
-    points: ["Buy / Rent / PG", "10 property types", "Budget 1 K – 10 Cr+"],
+    text: "Pick Buy, Rent or PG, choose from 9 property types and set a budget anywhere from ₹1,000 to ₹10 Cr+. Narrow down by BHK, facing, furnishing and more.",
+    points: ["Buy / Rent / PG", "9 property types", "Budget ₹1K – ₹10 Cr+"],
   },
   {
     screen: "/screens/detail.jpg",
-    title: "Talk to the owner",
-    text: "Check every detail — facing, dimensions, approval authority, RERA status — then tap Enquire Now or call the owner directly.",
-    points: ["Enquire on WhatsApp", "Call the owner", "Zero brokerage"],
+    title: "Enquire Now",
+    text: "Check every detail — dimensions, facing, approval authority, RERA, nearby places — then tap Enquire Now to message the owner on WhatsApp, or call.",
+    points: ["Enquire on WhatsApp", "One-tap call", "Save to Favorite"],
   },
 ];
 
@@ -68,9 +68,9 @@ export default function HowItWorks() {
         <Reveal className="section-head center">
           <span className="eyebrow">How it works</span>
           <h2>
-            From search to handshake in <em className="hl-green">four taps</em>
+            From search to site visit in <em className="hl-green">four taps</em>
           </h2>
-          <p>The same simple flow you get in the 30Forty app.</p>
+          <p>The same simple flow you get in the Thirty Forty app.</p>
         </Reveal>
 
         <div className="hiw-grid">

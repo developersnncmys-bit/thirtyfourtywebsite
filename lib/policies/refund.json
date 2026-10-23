@@ -1,0 +1,286 @@
+{
+ "title": "REFUND & CANCELLATION POLICY",
+ "subtitle": "Subscription fees, lead credits, and listing refund terms",
+ "effective": "Effective Date: June 1, 2025",
+ "updated": "Last Updated: June 2025",
+ "blocks": [
+  {
+   "type": "sectiontitle",
+   "text": "01 | Overview"
+  },
+  {
+   "type": "highlight",
+   "text": "Thirty Forty is a zero-brokerage real estate platform. Unlike e-commerce or accommodation booking platforms, transactions on Thirty Forty involve subscription plans, listing fees, and lead credit purchases, not direct property payments. This Refund and Cancellation Policy governs these Platform fee transactions exclusively and does not apply to any property transaction conducted between Owners and Seekers."
+  },
+  {
+   "type": "paragraph",
+   "text": "All refund requests must be submitted in writing to thirtyfortysupport@gmail.com with your account details and transaction reference number. Refunds, where applicable, are processed in Indian Rupees (INR) to the original payment method within the timelines specified below."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "02 | Subscription Plan Refunds"
+  },
+  {
+   "type": "subtitle",
+   "text": "2.1 General Subscription Refund Policy"
+  },
+  {
+   "type": "paragraph",
+   "text": "Thirty Forty offers subscription plans to Owners (for listing and lead generation features) and Seekers (for premium search and contact access). The following refund terms apply to all subscription purchases:"
+  },
+  {
+   "type": "table",
+   "headers": [
+    "Situation",
+    "Refund Eligibility",
+    "Refund Amount"
+   ],
+   "rows": [
+    [
+     "Cancellation within 24 hrs of first purchase (unused)",
+     "Eligible",
+     "100% of subscription fee"
+    ],
+    [
+     "Cancellation after 24 hrs but no features used",
+     "Eligible (case by case)",
+     "Prorated for unused days"
+    ],
+    [
+     "Cancellation after features have been used",
+     "Not eligible",
+     "No refund"
+    ],
+    [
+     "Auto-renewal charge (not cancelled before renewal)",
+     "Eligible within 48 hrs of renewal",
+     "100% of renewal amount"
+    ],
+    [
+     "Platform-side technical error causing incorrect charge",
+     "Always eligible",
+     "Full refund of erroneous charge"
+    ]
+   ]
+  },
+  {
+   "type": "subtitle",
+   "text": "2.2 Annual vs Monthly Plans"
+  },
+  {
+   "type": "bullet",
+   "text": "Monthly Plan cancellations: If cancelled within 24 hours of purchase with no features used, a full refund is processed. No prorated refund is available after features have been accessed."
+  },
+  {
+   "type": "bullet",
+   "text": "Annual Plan cancellations: If cancelled within 24 hours of purchase with no features used, a full refund is processed. After 24 hours, a prorated refund for the remaining unused months may be considered, subject to a processing fee of Rs. 499 plus applicable GST."
+  },
+  {
+   "type": "subtitle",
+   "text": "2.3 What Counts as “Feature Used”"
+  },
+  {
+   "type": "paragraph",
+   "text": "A subscription is considered “used” if any of the following have occurred after activation:"
+  },
+  {
+   "type": "bullet",
+   "text": "One or more property Listings have been published using the plan."
+  },
+  {
+   "type": "bullet",
+   "text": "One or more Owner contact details have been unlocked."
+  },
+  {
+   "type": "bullet",
+   "text": "Lead Credits provided as part of the plan have been spent."
+  },
+  {
+   "type": "bullet",
+   "text": "A premium badge or featured placement has been applied to a Listing."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "03 | Lead Credits and Unlock Charges"
+  },
+  {
+   "type": "subtitle",
+   "text": "3.1 Lead Credit Purchase Refunds"
+  },
+  {
+   "type": "table",
+   "headers": [
+    "Situation",
+    "Refund Eligibility",
+    "Refund Amount"
+   ],
+   "rows": [
+    [
+     "Owner contact unlocked but number/email is incorrect or inactive (disputed within 48 hrs)",
+     "Eligible after verification",
+     "Full reinstatement of Lead Credit"
+    ]
+   ]
+  },
+  {
+   "type": "subtitle",
+   "text": "3.2 Incorrect or Inactive Contact Information"
+  },
+  {
+   "type": "paragraph",
+   "text": "If you unlock an Owner’s contact and the mobile number or email is found to be incorrect, disconnected, or inactive, you may raise a dispute within 48 hours of unlocking. Submit your complaint with evidence (such as call log screenshots showing non-reachability) to thirtyfortysupport@gmail.com. Upon verification, the Lead Credit will be fully reinstated to your account."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "04 | Listing Fee Refunds"
+  },
+  {
+   "type": "paragraph",
+   "text": "In cases where Owners pay a one-time listing fee or a fee to boost, feature, or promote a Listing, the following policy applies:"
+  },
+  {
+   "type": "table",
+   "headers": [
+    "Situation",
+    "Refund Eligibility",
+    "Refund Amount"
+   ],
+   "rows": [
+    [
+     "Listing not yet published; cancelled within 24 hrs",
+     "Eligible",
+     "100% of listing fee"
+    ],
+    [
+     "Listing published and live",
+     "Not eligible",
+     "No refund"
+    ],
+    [
+     "Listing removed by Thirty Forty due to our error",
+     "Eligible",
+     "Full refund or free re-listing"
+    ],
+    [
+     "Listing removed due to policy violation by Owner",
+     "Not eligible",
+     "No refund"
+    ],
+    [
+     "Property sold or rented; Listing no longer needed",
+     "Not eligible",
+     "No refund for remaining days"
+    ]
+   ]
+  },
+  {
+   "type": "sectiontitle",
+   "text": "05 | Non-Refundable Items"
+  },
+  {
+   "type": "paragraph",
+   "text": "The following are non-refundable under all circumstances:"
+  },
+  {
+   "type": "bullet",
+   "text": "GST and other statutory taxes charged on any Platform transaction."
+  },
+  {
+   "type": "bullet",
+   "text": "Subscription fees for plans where features have been accessed or used."
+  },
+  {
+   "type": "bullet",
+   "text": "Listing boost or featured placement fees once the boost has been applied and gone live."
+  },
+  {
+   "type": "bullet",
+   "text": "Any fees paid as part of a promotional offer, discounted campaign, or flash sale (unless specifically stated otherwise in that offer’s terms)."
+  },
+  {
+   "type": "bullet",
+   "text": "Account reinstatement fees (if applicable) charged after account suspension."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "06 | Account Cancellation and Plan Termination"
+  },
+  {
+   "type": "subtitle",
+   "text": "6.1 Owner-Initiated Account Deletion"
+  },
+  {
+   "type": "paragraph",
+   "text": "If you delete your Thirty Forty account voluntarily, all active Listings will be removed and access to paid features will be terminated immediately. Any unused subscription days remaining at the time of account deletion may be eligible for a prorated refund, subject to the usage criteria in Section 2. Submit a refund request before deleting your account."
+  },
+  {
+   "type": "subtitle",
+   "text": "6.2 Thirty Forty-Initiated Account Termination"
+  },
+  {
+   "type": "paragraph",
+   "text": "If Thirty Forty suspends or terminates your account due to a violation of our Terms and Conditions, Listing Guidelines, or applicable law:"
+  },
+  {
+   "type": "bullet",
+   "text": "No refund of any subscription fee, listing fee, or Lead Credits will be issued."
+  },
+  {
+   "type": "bullet",
+   "text": "All Listings under the account will be immediately removed."
+  },
+  {
+   "type": "bullet",
+   "text": "Any pending payouts or credits in the account will be forfeited."
+  },
+  {
+   "type": "subtitle",
+   "text": "6.3 Platform Discontinuation"
+  },
+  {
+   "type": "paragraph",
+   "text": "In the unlikely event that Thirty Forty discontinues a feature or the Platform entirely, users with active paid subscriptions at the time of discontinuation will be entitled to a prorated refund for the unused portion of their subscription period."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "07 | Refund Processing Timelines"
+  },
+  {
+   "type": "table",
+   "headers": [
+    "Payment Method",
+    "Estimated Refund Timeline"
+   ],
+   "rows": [
+    [
+     "UPI (Google Pay, PhonePe, BHIM, Paytm)",
+     "1 to 3 business days"
+    ],
+    [
+     "Debit Card / Credit Card",
+     "5 to 7 business days"
+    ],
+    [
+     "Net Banking",
+     "3 to 5 business days"
+    ],
+    [
+     "Thirty Forty Wallet or Credit Balance",
+     "Instant (within 2 hours)"
+    ]
+   ]
+  },
+  {
+   "type": "paragraph",
+   "text": "Processing timelines are indicative and may vary based on your bank or payment provider. Thirty Forty initiates refunds promptly upon approval; however, we are not responsible for delays on the part of your bank or payment gateway after the refund has been initiated from our end."
+  },
+  {
+   "type": "sectiontitle",
+   "text": "08 | How to Raise a Refund Request"
+  },
+  {
+   "type": "paragraph",
+   "text": "Email thirtyfortysupport@gmail.com from your registered email address, including your account details, the transaction reference number, and a brief description of the reason for your request. Our team will acknowledge your request and process eligible refunds as per the terms and timelines set out in this policy."
+  }
+ ]
+}

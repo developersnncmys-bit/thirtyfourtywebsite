@@ -1,4 +1,4 @@
-// A phone frame for showing real 30Forty app screens
+// A phone frame for showing real Thirty Forty app screens
 export default function Phone({ src, alt = "", className = "", children }) {
   return (
     <div className={`phone ${className}`}>

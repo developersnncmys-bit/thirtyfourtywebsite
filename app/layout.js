@@ -4,10 +4,14 @@ import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
-import CompareTray from "@/components/CompareTray";
+import ListingsProvider from "@/components/ListingsProvider";
+import { getListings } from "@/lib/listings";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 import "./features.css";
+import "./theme.css";
+import "./portal.css";
+import "./portal-pages.css";
 
 // The app is set in Poppins
 const poppins = Poppins({
@@ -18,33 +22,35 @@ const poppins = Poppins({
 
 export const metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: "3040 Property — Buy, Sell & Rent with Zero Brokerage", template: "%s · 3040 Property" },
+  title: { default: `${SITE.name} — ${SITE.tagline}`, template: `%s · ${SITE.name}` },
   description:
-    "30Forty is a zero-brokerage real estate app that connects property owners and seekers directly. Flats, houses, plots, PG, commercial and agricultural land.",
+    "Thirty Forty (3040 Property) — buy, sell and rent flats, houses, villas, plots, PG, commercial spaces and agricultural land. Post your property free.",
   openGraph: {
-    title: "3040 Property — Zero Brokerage Real Estate",
-    description: "Buy, sell & rent property with zero brokerage. Flats, plots, PG & more.",
-    images: ["/logo.jpg"],
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: "Buy, sell & rent property. Flats, plots, PG, commercial & farm land. Post your property free.",
+    images: ["/brand/logo.png"],
   },
 };
 
 export const viewport = {
-  themeColor: "#024B1E",
+  themeColor: "#024B20",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const listings = await getListings();
   return (
     <html lang="en" className={poppins.variable}>
       {/* Browser extensions add attributes to <body> before React loads */}
       <body suppressHydrationWarning>
         <Preloader />
-        <SmoothScroll>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <CompareTray />
-          <BottomNav />
-        </SmoothScroll>
+        <ListingsProvider listings={listings}>
+          <SmoothScroll>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <BottomNav />
+          </SmoothScroll>
+        </ListingsProvider>
       </body>
     </html>
   );

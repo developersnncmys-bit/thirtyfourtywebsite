@@ -1,35 +1,32 @@
-import Hero from "@/components/home/Hero";
-import Categories from "@/components/home/Categories";
-import Marquee from "@/components/home/Marquee";
+import HeroBanner from "@/components/home/HeroBanner";
+import ExploreOptions from "@/components/home/ExploreOptions";
+import ListingRail from "@/components/home/ListingRail";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
-import Featured from "@/components/home/Featured";
-import TopLocalities from "@/components/home/TopLocalities";
-import NewProjects from "@/components/home/NewProjects";
+import TypeCounts from "@/components/home/TypeCounts";
+import BudgetBhk from "@/components/home/BudgetBhk";
+import OwnerBanner from "@/components/home/OwnerBanner";
+import Cities from "@/components/home/Cities";
 import HowItWorks from "@/components/home/HowItWorks";
-import BrokerageCalc from "@/components/home/BrokerageCalc";
-import PropertyTypes from "@/components/home/PropertyTypes";
-import ToolsStrip from "@/components/home/ToolsStrip";
-import WhyUs from "@/components/home/WhyUs";
-import OwnersSeekers from "@/components/home/OwnersSeekers";
+import PremiumTeaser from "@/components/home/PremiumTeaser";
 import AppCTA from "@/components/home/AppCTA";
 import FAQ from "@/components/home/FAQ";
 
+// Laid out like the 99acres home page, with Thirty Forty's live listings
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Categories />
-      <Marquee />
+      <HeroBanner />
+      <ExploreOptions />
+      <ListingRail eyebrow="Fresh on Thirty Forty" title="Recommended properties" sub="Newest listings from the app" href="/properties" empty="No properties listed yet" />
       <RecentlyViewed />
-      <Featured />
-      <TopLocalities />
-      <NewProjects />
+      <TypeCounts />
+      <ListingRail eyebrow="New Launch" title="Newly launched properties" sub="Brand-new homes, plots and spaces for sale" filter="newLaunch" href="/properties?mode=buy&sale=New" tone="lrail-tint" />
+      <BudgetBhk />
+      <OwnerBanner />
+      <ListingRail eyebrow="For tenants" title="Properties for rent & PG" sub="Homes, PG and commercial spaces on rent" filter="rent" href="/properties?mode=rent" />
+      <Cities />
       <HowItWorks />
-      <BrokerageCalc />
-      <PropertyTypes />
-      <ToolsStrip />
-      <WhyUs />
-      <OwnersSeekers />
+      <PremiumTeaser />
       <AppCTA />
       <FAQ />
     </>

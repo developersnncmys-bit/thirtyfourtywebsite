@@ -5,9 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import PropertyCard from "./PropertyCard";
 import Icon from "./Icon";
 import { useShortlist, useRecent, useSavedSearches } from "@/lib/store";
-import { PROPERTIES } from "@/lib/data";
-
-const byIds = (ids) => ids.map((id) => PROPERTIES.find((p) => p.id === id)).filter(Boolean);
+import { useListings } from "./ListingsProvider";
 
 function Empty({ icon, title, text }) {
   return (
@@ -30,8 +28,10 @@ export default function FavouritesList() {
   const shortlist = useShortlist();
   const recent = useRecent();
   const searches = useSavedSearches();
+  const listings = useListings();
+  const byIds = (ids) => ids.map((id) => listings.find((p) => p.id === id)).filter(Boolean);
   const tabs = [
-    { id: "saved", label: "Shortlisted", n: shortlist.ids.length },
+    { id: "saved", label: "Favorites", n: shortlist.ids.length },
     { id: "recent", label: "Recently viewed", n: recent.ids.length },
     { id: "searches", label: "Saved searches", n: searches.list.length },
   ];
@@ -60,7 +60,7 @@ export default function FavouritesList() {
                   ))}
                 </div>
               ) : (
-                <Empty icon="heart" title="No shortlisted properties yet" text="Tap the heart on any listing to keep it here." />
+                <Empty icon="heart" title="No Favorites" text="Tap the heart on any listing to keep it here." />
               ))}
 
             {tab === "recent" &&
