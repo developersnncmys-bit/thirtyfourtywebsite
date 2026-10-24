@@ -237,6 +237,9 @@
 
 /* Very small phones (320px) */
 @media (max-width: 360px) {
+  .hb-copy h1.hb-lines {
+    font-size: 28px;
+  }
   .post-pill {
     font-size: 12px;
     padding: 6px 6px 6px 11px;

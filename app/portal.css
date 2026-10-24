@@ -253,6 +253,31 @@
   letter-spacing: -0.03em;
   max-width: 720px;
 }
+/* "Property Owners / Seekers / Brokers" — three lines, second word in gold */
+.hb-copy h1.hb-lines {
+  font-size: clamp(30px, min(3.9vw, 5.6svh), 58px);
+  line-height: 1.06;
+}
+/* Short laptop screens: keep the button clear of the search card */
+@media (min-width: 901px) and (max-height: 780px) {
+  .hb-kicker {
+    display: none;
+  }
+  .hb-copy h1 {
+    margin-top: 0;
+  }
+  .hb-copy p {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+}
+.hb-copy h1.hb-lines span {
+  display: block;
+}
+.hb-copy h1.hb-lines em {
+  font-style: normal;
+  color: var(--yellow);
+}
 .hb-copy h1 .hl {
   white-space: normal;
 }

@@ -24,12 +24,21 @@ function useSlides() {
       id: "brand",
       bg: "/props/house-mysore.webp",
       kicker: "Thirty Forty · 3040 Property",
+      lines: true,
       title: (
         <>
-          Real Estate. <em className="hl">Simplified.</em>
+          <span>
+            Property <em>Owners</em>
+          </span>
+          <span>
+            Property <em>Seekers</em>
+          </span>
+          <span>
+            Property <em>Brokers</em>
+          </span>
         </>
       ),
-      text: "Buy, sell and rent flats, houses, villas, plots, PG, commercial spaces and farm land.",
+      text: "Buy, sell or rent with more confidence. 3040 connects property owners, seekers and brokers directly, helping you discover homes, plots, rentals and commercial spaces.",
       cta: { label: "Explore properties", href: "/properties" },
       phone: "/screens/app-home.jpg",
     },
@@ -126,7 +135,7 @@ export default function HeroBanner() {
               <motion.span className="hb-kicker" variants={{ hide: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0 }, out: { opacity: 0 } }}>
                 <span className="live-dot" /> {s.kicker}
               </motion.span>
-              <motion.h1 variants={{ hide: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } }, out: { opacity: 0, y: -20 } }}>{s.title}</motion.h1>
+              <motion.h1 className={s.lines ? "hb-lines" : ""} variants={{ hide: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } }, out: { opacity: 0, y: -20 } }}>{s.title}</motion.h1>
               <motion.p variants={{ hide: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 }, out: { opacity: 0 } }}>{s.text}</motion.p>
               <motion.div variants={{ hide: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 }, out: { opacity: 0 } }}>
                 <Link href={s.cta.href} className="btn btn-yellow btn-shine">

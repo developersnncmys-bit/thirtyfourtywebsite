@@ -14,9 +14,9 @@ export default function Home() {
   return (
     <>
       <HeroBanner />
-      <ExploreOptions />
-      <ListingRail eyebrow="Fresh on Thirty Forty" title="Recommended properties" sub="Newest listings from the app" href="/properties" empty="No properties listed yet" />
       <TypeCounts />
+      <ListingRail eyebrow="Fresh on Thirty Forty" title="Recommended properties" sub="Newest listings from the app" href="/properties" empty="No properties listed yet" />
+      <ExploreOptions />
       <BudgetBhk />
       <OwnerBanner />
       <ListingRail eyebrow="For tenants" title="Properties for rent & PG" sub="Homes, PG and commercial spaces on rent" filter="rent" href="/properties?mode=rent" />
